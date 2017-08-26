@@ -20,6 +20,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <string.h>
 
 #include "base/logging.h"
 #include "base/value_object.h"
