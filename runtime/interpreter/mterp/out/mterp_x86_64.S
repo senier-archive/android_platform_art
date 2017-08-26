@@ -369,7 +369,7 @@ SYMBOL(ExecuteMterpImpl):
     /* Set up for backwards branches & osr profiling */
     movq    OFF_FP_METHOD(rFP), OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
-    call    SYMBOL(MterpSetUpHotnessCountdown)
+    call    SYMBOL(MterpSetUpHotnessCountdown)@PLT
     movswl  %ax, rPROFILE
 
     /* start executing the instruction at rPC */
@@ -585,11 +585,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
 .L_op_return_void: /* 0x0e */
 /* File: x86_64/op_return_void.S */
     .extern MterpThreadFenceForConstructor
-    call    SYMBOL(MterpThreadFenceForConstructor)
+    call    SYMBOL(MterpThreadFenceForConstructor)@PLT
     movq    rSELF, OUT_ARG0
     testl   $(THREAD_SUSPEND_OR_CHECKPOINT_REQUEST), THREAD_FLAGS_OFFSET(OUT_ARG0)
     jz      1f
-    call    SYMBOL(MterpSuspendCheck)
+    call    SYMBOL(MterpSuspendCheck)@PLT
 1:
     xorq    %rax, %rax
     jmp     MterpReturn
@@ -605,11 +605,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
  */
     /* op vAA */
     .extern MterpThreadFenceForConstructor
-    call    SYMBOL(MterpThreadFenceForConstructor)
+    call    SYMBOL(MterpThreadFenceForConstructor)@PLT
     movq    rSELF, OUT_ARG0
     testl   $(THREAD_SUSPEND_OR_CHECKPOINT_REQUEST), THREAD_FLAGS_OFFSET(OUT_ARG0)
     jz      1f
-    call    SYMBOL(MterpSuspendCheck)
+    call    SYMBOL(MterpSuspendCheck)@PLT
 1:
     GET_VREG %eax, rINSTq                   # eax <- vAA
     jmp     MterpReturn
@@ -623,11 +623,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
  */
     /* return-wide vAA */
     .extern MterpThreadFenceForConstructor
-    call    SYMBOL(MterpThreadFenceForConstructor)
+    call    SYMBOL(MterpThreadFenceForConstructor)@PLT
     movq    rSELF, OUT_ARG0
     testl   $(THREAD_SUSPEND_OR_CHECKPOINT_REQUEST), THREAD_FLAGS_OFFSET(OUT_ARG0)
     jz      1f
-    call    SYMBOL(MterpSuspendCheck)
+    call    SYMBOL(MterpSuspendCheck)@PLT
 1:
     GET_WIDE_VREG %rax, rINSTq              # eax <- v[AA]
     jmp     MterpReturn
@@ -644,11 +644,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
  */
     /* op vAA */
     .extern MterpThreadFenceForConstructor
-    call    SYMBOL(MterpThreadFenceForConstructor)
+    call    SYMBOL(MterpThreadFenceForConstructor)@PLT
     movq    rSELF, OUT_ARG0
     testl   $(THREAD_SUSPEND_OR_CHECKPOINT_REQUEST), THREAD_FLAGS_OFFSET(OUT_ARG0)
     jz      1f
-    call    SYMBOL(MterpSuspendCheck)
+    call    SYMBOL(MterpSuspendCheck)@PLT
 1:
     GET_VREG %eax, rINSTq                   # eax <- vAA
     jmp     MterpReturn
@@ -741,7 +741,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rINSTq, OUT_ARG1
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG2
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(MterpConstString)        # (index, tgt_reg, shadow_frame, self)
+    call    SYMBOL(MterpConstString)@PLT        # (index, tgt_reg, shadow_frame, self)
     testb   %al, %al
     jnz     MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -756,7 +756,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rINSTq, OUT_ARG1
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG2
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(MterpConstString)        # (index, tgt_reg, shadow_frame, self)
+    call    SYMBOL(MterpConstString)@PLT        # (index, tgt_reg, shadow_frame, self)
     testb   %al, %al
     jnz     MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 3
@@ -771,7 +771,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rINSTq, OUT_ARG1
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG2
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(MterpConstClass)         # (index, tgt_reg, shadow_frame, self)
+    call    SYMBOL(MterpConstClass)@PLT         # (index, tgt_reg, shadow_frame, self)
     testb   %al, %al
     jnz     MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -787,7 +787,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     EXPORT_PC
     GET_VREG OUT_32_ARG0, rINSTq
     movq    rSELF, OUT_ARG1
-    call    SYMBOL(artLockObjectFromCode)   # (object, self)
+    call    SYMBOL(artLockObjectFromCode)@PLT   # (object, self)
     testq   %rax, %rax
     jnz     MterpException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 1
@@ -807,7 +807,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     EXPORT_PC
     GET_VREG OUT_32_ARG0, rINSTq
     movq    rSELF, OUT_ARG1
-    call    SYMBOL(artUnlockObjectFromCode) # (object, self)
+    call    SYMBOL(artUnlockObjectFromCode)@PLT # (object, self)
     testq   %rax, %rax
     jnz     MterpException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 1
@@ -825,7 +825,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     leaq    VREG_ADDRESS(rINSTq), OUT_ARG1
     movq    OFF_FP_METHOD(rFP), OUT_ARG2
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(MterpCheckCast)          # (index, &obj, method, self)
+    call    SYMBOL(MterpCheckCast)@PLT          # (index, &obj, method, self)
     testb   %al, %al
     jnz     MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -848,7 +848,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     leaq    VREG_ADDRESS(%rax), OUT_ARG1    # Get object address
     movq    OFF_FP_METHOD(rFP), OUT_ARG2
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(MterpInstanceOf)         # (index, &obj, method, self)
+    call    SYMBOL(MterpInstanceOf)@PLT         # (index, &obj, method, self)
     movsbl  %al, %eax
     movq    rSELF, %rcx
     cmpq    $0, THREAD_EXCEPTION_OFFSET(%rcx)
@@ -887,7 +887,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rSELF, OUT_ARG1
     REFRESH_INST 34
     movq    rINSTq, OUT_ARG2
-    call    SYMBOL(MterpNewInstance)
+    call    SYMBOL(MterpNewInstance)@PLT
     testb   %al, %al                        # 0 means an exception is thrown
     jz      MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -910,7 +910,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     REFRESH_INST 35
     movq    rINSTq, OUT_ARG2
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(MterpNewArray)
+    call    SYMBOL(MterpNewArray)@PLT
     testb   %al, %al                        # 0 means an exception is thrown
     jz      MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -931,7 +931,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG0
     movq    rPC, OUT_ARG1
     movq    rSELF, OUT_ARG2
-    call    SYMBOL(MterpFilledNewArray)
+    call    SYMBOL(MterpFilledNewArray)@PLT
     testb   %al, %al                        # 0 means an exception is thrown
     jz      MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 3
@@ -953,7 +953,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG0
     movq    rPC, OUT_ARG1
     movq    rSELF, OUT_ARG2
-    call    SYMBOL(MterpFilledNewArrayRange)
+    call    SYMBOL(MterpFilledNewArrayRange)@PLT
     testb   %al, %al                        # 0 means an exception is thrown
     jz      MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 3
@@ -968,7 +968,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movslq  2(rPC), %rcx                    # rcx <- ssssssssBBBBbbbb
     leaq    (rPC,%rcx,2), OUT_ARG1          # OUT_ARG1 <- PC + ssssssssBBBBbbbb*2
     GET_VREG OUT_32_ARG0, rINSTq            # OUT_ARG0 <- vAA (array object)
-    call    SYMBOL(MterpFillArrayData)      # (obj, payload)
+    call    SYMBOL(MterpFillArrayData)@PLT      # (obj, payload)
     testb   %al, %al                        # 0 means an exception is thrown
     jz      MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 3
@@ -1054,7 +1054,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movslq  2(rPC), OUT_ARG0                # rcx <- ssssssssBBBBbbbb
     leaq    (rPC,OUT_ARG0,2), OUT_ARG0      # rcx <- PC + ssssssssBBBBbbbb*2
     GET_VREG OUT_32_ARG1, rINSTq            # eax <- vAA
-    call    SYMBOL(MterpDoPackedSwitch)
+    call    SYMBOL(MterpDoPackedSwitch)@PLT
     testl   %eax, %eax
     movslq  %eax, rINSTq
     jmp     MterpCommonTakenBranch
@@ -1077,7 +1077,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movslq  2(rPC), OUT_ARG0                # rcx <- ssssssssBBBBbbbb
     leaq    (rPC,OUT_ARG0,2), OUT_ARG0      # rcx <- PC + ssssssssBBBBbbbb*2
     GET_VREG OUT_32_ARG1, rINSTq            # eax <- vAA
-    call    SYMBOL(MterpDoSparseSwitch)
+    call    SYMBOL(MterpDoSparseSwitch)@PLT
     testl   %eax, %eax
     movslq  %eax, rINSTq
     jmp     MterpCommonTakenBranch
@@ -1720,7 +1720,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG0, %rax              # eax <- vBB (array object)
     GET_VREG OUT_32_ARG1, %rcx              # ecx <- vCC (requested index)
     EXPORT_PC
-    call    SYMBOL(artAGetObjectFromMterp)  # (array, index)
+    call    SYMBOL(artAGetObjectFromMterp)@PLT  # (array, index)
     movq    rSELF, %rcx
     cmpq    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException
@@ -1916,7 +1916,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rPC, OUT_ARG1
     REFRESH_INST 77
     movq    rINSTq, OUT_ARG2
-    call    SYMBOL(MterpAputObject)         # (array, index)
+    call    SYMBOL(MterpAputObject)@PLT         # (array, index)
     testb   %al, %al
     jz      MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2053,7 +2053,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG1, %rcx              # the object pointer
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(artGet32InstanceFromCode)
+    call    SYMBOL(artGet32InstanceFromCode)@PLT
     movq    rSELF, %rcx
     cmpq    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException                  # bail out
@@ -2086,7 +2086,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG1, %rcx              # the object pointer
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(artGet64InstanceFromCode)
+    call    SYMBOL(artGet64InstanceFromCode)@PLT
     movq    rSELF, %rcx
     cmpq    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException                  # bail out
@@ -2120,7 +2120,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG1, %rcx              # the object pointer
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(artGetObjInstanceFromCode)
+    call    SYMBOL(artGetObjInstanceFromCode)@PLT
     movq    rSELF, %rcx
     cmpq    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException                  # bail out
@@ -2154,7 +2154,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG1, %rcx              # the object pointer
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(artGetBooleanInstanceFromCode)
+    call    SYMBOL(artGetBooleanInstanceFromCode)@PLT
     movq    rSELF, %rcx
     cmpq    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException                  # bail out
@@ -2188,7 +2188,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG1, %rcx              # the object pointer
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(artGetByteInstanceFromCode)
+    call    SYMBOL(artGetByteInstanceFromCode)@PLT
     movq    rSELF, %rcx
     cmpq    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException                  # bail out
@@ -2222,7 +2222,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG1, %rcx              # the object pointer
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(artGetCharInstanceFromCode)
+    call    SYMBOL(artGetCharInstanceFromCode)@PLT
     movq    rSELF, %rcx
     cmpq    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException                  # bail out
@@ -2256,7 +2256,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG1, %rcx              # the object pointer
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(artGetShortInstanceFromCode)
+    call    SYMBOL(artGetShortInstanceFromCode)@PLT
     movq    rSELF, %rcx
     cmpq    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException                  # bail out
@@ -2292,7 +2292,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     andb    $0xf, rINSTbl                  # rINST<- A
     GET_VREG OUT_32_ARG2, rINSTq            # fp[A]
     movq    OFF_FP_METHOD(rFP), OUT_ARG3    # referrer
-    call    SYMBOL(artSet32InstanceFromMterp)
+    call    SYMBOL(artSet32InstanceFromMterp)@PLT
     testb   %al, %al
     jnz     MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2311,7 +2311,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     andb    $0xf, rINSTbl                  # rINST <- A
     leaq    VREG_ADDRESS(rINSTq), OUT_ARG2  # &fp[A]
     movq    OFF_FP_METHOD(rFP), OUT_ARG3    # referrer
-    call    SYMBOL(artSet64InstanceFromMterp)
+    call    SYMBOL(artSet64InstanceFromMterp)@PLT
     testb   %al, %al
     jnz     MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2326,7 +2326,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     REFRESH_INST 91
     movl    rINST, OUT_32_ARG2
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(MterpIputObject)
+    call    SYMBOL(MterpIputObject)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2351,7 +2351,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     andb    $0xf, rINSTbl                  # rINST<- A
     GET_VREG OUT_32_ARG2, rINSTq            # fp[A]
     movq    OFF_FP_METHOD(rFP), OUT_ARG3    # referrer
-    call    SYMBOL(artSet8InstanceFromMterp)
+    call    SYMBOL(artSet8InstanceFromMterp)@PLT
     testb   %al, %al
     jnz     MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2377,7 +2377,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     andb    $0xf, rINSTbl                  # rINST<- A
     GET_VREG OUT_32_ARG2, rINSTq            # fp[A]
     movq    OFF_FP_METHOD(rFP), OUT_ARG3    # referrer
-    call    SYMBOL(artSet8InstanceFromMterp)
+    call    SYMBOL(artSet8InstanceFromMterp)@PLT
     testb   %al, %al
     jnz     MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2403,7 +2403,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     andb    $0xf, rINSTbl                  # rINST<- A
     GET_VREG OUT_32_ARG2, rINSTq            # fp[A]
     movq    OFF_FP_METHOD(rFP), OUT_ARG3    # referrer
-    call    SYMBOL(artSet16InstanceFromMterp)
+    call    SYMBOL(artSet16InstanceFromMterp)@PLT
     testb   %al, %al
     jnz     MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2429,7 +2429,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     andb    $0xf, rINSTbl                  # rINST<- A
     GET_VREG OUT_32_ARG2, rINSTq            # fp[A]
     movq    OFF_FP_METHOD(rFP), OUT_ARG3    # referrer
-    call    SYMBOL(artSet16InstanceFromMterp)
+    call    SYMBOL(artSet16InstanceFromMterp)@PLT
     testb   %al, %al
     jnz     MterpPossibleException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2450,7 +2450,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movzwq  2(rPC), OUT_ARG0                # field ref CCCC
     movq    OFF_FP_METHOD(rFP), OUT_ARG1    # referrer
     movq    rSELF, OUT_ARG2                 # self
-    call    SYMBOL(MterpGet32Static)
+    call    SYMBOL(MterpGet32Static)@PLT
     movq    rSELF, %rcx
     cmpl    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException
@@ -2481,7 +2481,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movzwq  2(rPC), OUT_ARG0                # field ref CCCC
     movq    OFF_FP_METHOD(rFP), OUT_ARG1    # referrer
     movq    rSELF, OUT_ARG2                 # self
-    call    SYMBOL(MterpGet64Static)
+    call    SYMBOL(MterpGet64Static)@PLT
     movq    rSELF, %rcx
     cmpl    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException
@@ -2513,7 +2513,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movzwq  2(rPC), OUT_ARG0                # field ref CCCC
     movq    OFF_FP_METHOD(rFP), OUT_ARG1    # referrer
     movq    rSELF, OUT_ARG2                 # self
-    call    SYMBOL(MterpGetObjStatic)
+    call    SYMBOL(MterpGetObjStatic)@PLT
     movq    rSELF, %rcx
     cmpl    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException
@@ -2545,7 +2545,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movzwq  2(rPC), OUT_ARG0                # field ref CCCC
     movq    OFF_FP_METHOD(rFP), OUT_ARG1    # referrer
     movq    rSELF, OUT_ARG2                 # self
-    call    SYMBOL(MterpGetBooleanStatic)
+    call    SYMBOL(MterpGetBooleanStatic)@PLT
     movq    rSELF, %rcx
     cmpl    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException
@@ -2577,7 +2577,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movzwq  2(rPC), OUT_ARG0                # field ref CCCC
     movq    OFF_FP_METHOD(rFP), OUT_ARG1    # referrer
     movq    rSELF, OUT_ARG2                 # self
-    call    SYMBOL(MterpGetByteStatic)
+    call    SYMBOL(MterpGetByteStatic)@PLT
     movq    rSELF, %rcx
     cmpl    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException
@@ -2609,7 +2609,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movzwq  2(rPC), OUT_ARG0                # field ref CCCC
     movq    OFF_FP_METHOD(rFP), OUT_ARG1    # referrer
     movq    rSELF, OUT_ARG2                 # self
-    call    SYMBOL(MterpGetCharStatic)
+    call    SYMBOL(MterpGetCharStatic)@PLT
     movq    rSELF, %rcx
     cmpl    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException
@@ -2641,7 +2641,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movzwq  2(rPC), OUT_ARG0                # field ref CCCC
     movq    OFF_FP_METHOD(rFP), OUT_ARG1    # referrer
     movq    rSELF, OUT_ARG2                 # self
-    call    SYMBOL(MterpGetShortStatic)
+    call    SYMBOL(MterpGetShortStatic)@PLT
     movq    rSELF, %rcx
     cmpl    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException
@@ -2673,7 +2673,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG1, rINSTq            # fp[AA]
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3                 # self
-    call    SYMBOL(MterpSet32Static)
+    call    SYMBOL(MterpSet32Static)@PLT
     testb   %al, %al
     jnz     MterpException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2693,7 +2693,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     leaq    VREG_ADDRESS(rINSTq), OUT_ARG1  # &fp[AA]
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3                 # self
-    call    SYMBOL(MterpSet64Static)
+    call    SYMBOL(MterpSet64Static)@PLT
     testb   %al, %al
     jnz     MterpException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2708,7 +2708,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     REFRESH_INST 105
     movq    rINSTq, OUT_ARG2
     movq    rSELF, OUT_ARG3
-    call    SYMBOL(MterpSputObject)
+    call    SYMBOL(MterpSputObject)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2730,7 +2730,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG1, rINSTq            # fp[AA]
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3                 # self
-    call    SYMBOL(MterpSetBooleanStatic)
+    call    SYMBOL(MterpSetBooleanStatic)@PLT
     testb   %al, %al
     jnz     MterpException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2753,7 +2753,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG1, rINSTq            # fp[AA]
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3                 # self
-    call    SYMBOL(MterpSetByteStatic)
+    call    SYMBOL(MterpSetByteStatic)@PLT
     testb   %al, %al
     jnz     MterpException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2776,7 +2776,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG1, rINSTq            # fp[AA]
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3                 # self
-    call    SYMBOL(MterpSetCharStatic)
+    call    SYMBOL(MterpSetCharStatic)@PLT
     testb   %al, %al
     jnz     MterpException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2799,7 +2799,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     GET_VREG OUT_32_ARG1, rINSTq            # fp[AA]
     movq    OFF_FP_METHOD(rFP), OUT_ARG2    # referrer
     movq    rSELF, OUT_ARG3                 # self
-    call    SYMBOL(MterpSetShortStatic)
+    call    SYMBOL(MterpSetShortStatic)@PLT
     testb   %al, %al
     jnz     MterpException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -2822,11 +2822,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rPC, OUT_ARG2
     REFRESH_INST 110
     movl    rINST, OUT_32_ARG3
-    call    SYMBOL(MterpInvokeVirtual)
+    call    SYMBOL(MterpInvokeVirtual)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC 3
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     FETCH_INST
@@ -2857,11 +2857,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rPC, OUT_ARG2
     REFRESH_INST 111
     movl    rINST, OUT_32_ARG3
-    call    SYMBOL(MterpInvokeSuper)
+    call    SYMBOL(MterpInvokeSuper)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC 3
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     FETCH_INST
@@ -2892,11 +2892,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rPC, OUT_ARG2
     REFRESH_INST 112
     movl    rINST, OUT_32_ARG3
-    call    SYMBOL(MterpInvokeDirect)
+    call    SYMBOL(MterpInvokeDirect)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC 3
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     FETCH_INST
@@ -2920,11 +2920,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rPC, OUT_ARG2
     REFRESH_INST 113
     movl    rINST, OUT_32_ARG3
-    call    SYMBOL(MterpInvokeStatic)
+    call    SYMBOL(MterpInvokeStatic)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC 3
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     FETCH_INST
@@ -2949,11 +2949,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rPC, OUT_ARG2
     REFRESH_INST 114
     movl    rINST, OUT_32_ARG3
-    call    SYMBOL(MterpInvokeInterface)
+    call    SYMBOL(MterpInvokeInterface)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC 3
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     FETCH_INST
@@ -2974,7 +2974,7 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rSELF, OUT_ARG0
     testl   $(THREAD_SUSPEND_OR_CHECKPOINT_REQUEST), THREAD_FLAGS_OFFSET(OUT_ARG0)
     jz      1f
-    call    SYMBOL(MterpSuspendCheck)
+    call    SYMBOL(MterpSuspendCheck)@PLT
 1:
     xorq    %rax, %rax
     jmp     MterpReturn
@@ -2996,11 +2996,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rPC, OUT_ARG2
     REFRESH_INST 116
     movl    rINST, OUT_32_ARG3
-    call    SYMBOL(MterpInvokeVirtualRange)
+    call    SYMBOL(MterpInvokeVirtualRange)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC 3
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     FETCH_INST
@@ -3024,11 +3024,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rPC, OUT_ARG2
     REFRESH_INST 117
     movl    rINST, OUT_32_ARG3
-    call    SYMBOL(MterpInvokeSuperRange)
+    call    SYMBOL(MterpInvokeSuperRange)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC 3
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     FETCH_INST
@@ -3052,11 +3052,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rPC, OUT_ARG2
     REFRESH_INST 118
     movl    rINST, OUT_32_ARG3
-    call    SYMBOL(MterpInvokeDirectRange)
+    call    SYMBOL(MterpInvokeDirectRange)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC 3
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     FETCH_INST
@@ -3080,11 +3080,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rPC, OUT_ARG2
     REFRESH_INST 119
     movl    rINST, OUT_32_ARG3
-    call    SYMBOL(MterpInvokeStaticRange)
+    call    SYMBOL(MterpInvokeStaticRange)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC 3
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     FETCH_INST
@@ -3108,11 +3108,11 @@ SYMBOL(artMterpAsmInstructionStart) = .L_op_nop
     movq    rPC, OUT_ARG2
     REFRESH_INST 120
     movl    rINST, OUT_32_ARG3
-    call    SYMBOL(MterpInvokeInterfaceRange)
+    call    SYMBOL(MterpInvokeInterfaceRange)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC 3
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     FETCH_INST
@@ -5680,7 +5680,7 @@ movswl %ax, %eax
     GET_VREG OUT_32_ARG0, %rcx              # vB (object we're operating on)
     movzwl  2(rPC), OUT_32_ARG1             # eax <- field byte offset
     EXPORT_PC
-    callq   SYMBOL(artIGetObjectFromMterp)  # (obj, offset)
+    callq   SYMBOL(artIGetObjectFromMterp)@PLT  # (obj, offset)
     movq    rSELF, %rcx
     cmpq    $0, THREAD_EXCEPTION_OFFSET(%rcx)
     jnz     MterpException                  # bail out
@@ -5731,7 +5731,7 @@ movswl %ax, %eax
     movq    rPC, OUT_ARG1
     REFRESH_INST 232
     movl    rINST, OUT_32_ARG2
-    call    SYMBOL(MterpIputObjectQuick)
+    call    SYMBOL(MterpIputObjectQuick)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -5753,11 +5753,11 @@ movswl %ax, %eax
     movq    rPC, OUT_ARG2
     REFRESH_INST 233
     movl    rINST, OUT_32_ARG3
-    call    SYMBOL(MterpInvokeVirtualQuick)
+    call    SYMBOL(MterpInvokeVirtualQuick)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC 3
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     FETCH_INST
@@ -5781,11 +5781,11 @@ movswl %ax, %eax
     movq    rPC, OUT_ARG2
     REFRESH_INST 234
     movl    rINST, OUT_32_ARG3
-    call    SYMBOL(MterpInvokeVirtualQuickRange)
+    call    SYMBOL(MterpInvokeVirtualQuickRange)@PLT
     testb   %al, %al
     jz      MterpException
     ADVANCE_PC 3
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     FETCH_INST
@@ -6136,7 +6136,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(0*128)
 
 /* ------------------------------ */
@@ -6158,7 +6158,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(1*128)
 
 /* ------------------------------ */
@@ -6180,7 +6180,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(2*128)
 
 /* ------------------------------ */
@@ -6202,7 +6202,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(3*128)
 
 /* ------------------------------ */
@@ -6224,7 +6224,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(4*128)
 
 /* ------------------------------ */
@@ -6246,7 +6246,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(5*128)
 
 /* ------------------------------ */
@@ -6268,7 +6268,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(6*128)
 
 /* ------------------------------ */
@@ -6290,7 +6290,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(7*128)
 
 /* ------------------------------ */
@@ -6312,7 +6312,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(8*128)
 
 /* ------------------------------ */
@@ -6334,7 +6334,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(9*128)
 
 /* ------------------------------ */
@@ -6356,7 +6356,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(10*128)
 
 /* ------------------------------ */
@@ -6378,7 +6378,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(11*128)
 
 /* ------------------------------ */
@@ -6400,7 +6400,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(12*128)
 
 /* ------------------------------ */
@@ -6422,7 +6422,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(13*128)
 
 /* ------------------------------ */
@@ -6444,7 +6444,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(14*128)
 
 /* ------------------------------ */
@@ -6466,7 +6466,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(15*128)
 
 /* ------------------------------ */
@@ -6488,7 +6488,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(16*128)
 
 /* ------------------------------ */
@@ -6510,7 +6510,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(17*128)
 
 /* ------------------------------ */
@@ -6532,7 +6532,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(18*128)
 
 /* ------------------------------ */
@@ -6554,7 +6554,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(19*128)
 
 /* ------------------------------ */
@@ -6576,7 +6576,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(20*128)
 
 /* ------------------------------ */
@@ -6598,7 +6598,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(21*128)
 
 /* ------------------------------ */
@@ -6620,7 +6620,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(22*128)
 
 /* ------------------------------ */
@@ -6642,7 +6642,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(23*128)
 
 /* ------------------------------ */
@@ -6664,7 +6664,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(24*128)
 
 /* ------------------------------ */
@@ -6686,7 +6686,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(25*128)
 
 /* ------------------------------ */
@@ -6708,7 +6708,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(26*128)
 
 /* ------------------------------ */
@@ -6730,7 +6730,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(27*128)
 
 /* ------------------------------ */
@@ -6752,7 +6752,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(28*128)
 
 /* ------------------------------ */
@@ -6774,7 +6774,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(29*128)
 
 /* ------------------------------ */
@@ -6796,7 +6796,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(30*128)
 
 /* ------------------------------ */
@@ -6818,7 +6818,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(31*128)
 
 /* ------------------------------ */
@@ -6840,7 +6840,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(32*128)
 
 /* ------------------------------ */
@@ -6862,7 +6862,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(33*128)
 
 /* ------------------------------ */
@@ -6884,7 +6884,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(34*128)
 
 /* ------------------------------ */
@@ -6906,7 +6906,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(35*128)
 
 /* ------------------------------ */
@@ -6928,7 +6928,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(36*128)
 
 /* ------------------------------ */
@@ -6950,7 +6950,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(37*128)
 
 /* ------------------------------ */
@@ -6972,7 +6972,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(38*128)
 
 /* ------------------------------ */
@@ -6994,7 +6994,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(39*128)
 
 /* ------------------------------ */
@@ -7016,7 +7016,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(40*128)
 
 /* ------------------------------ */
@@ -7038,7 +7038,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(41*128)
 
 /* ------------------------------ */
@@ -7060,7 +7060,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(42*128)
 
 /* ------------------------------ */
@@ -7082,7 +7082,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(43*128)
 
 /* ------------------------------ */
@@ -7104,7 +7104,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(44*128)
 
 /* ------------------------------ */
@@ -7126,7 +7126,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(45*128)
 
 /* ------------------------------ */
@@ -7148,7 +7148,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(46*128)
 
 /* ------------------------------ */
@@ -7170,7 +7170,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(47*128)
 
 /* ------------------------------ */
@@ -7192,7 +7192,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(48*128)
 
 /* ------------------------------ */
@@ -7214,7 +7214,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(49*128)
 
 /* ------------------------------ */
@@ -7236,7 +7236,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(50*128)
 
 /* ------------------------------ */
@@ -7258,7 +7258,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(51*128)
 
 /* ------------------------------ */
@@ -7280,7 +7280,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(52*128)
 
 /* ------------------------------ */
@@ -7302,7 +7302,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(53*128)
 
 /* ------------------------------ */
@@ -7324,7 +7324,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(54*128)
 
 /* ------------------------------ */
@@ -7346,7 +7346,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(55*128)
 
 /* ------------------------------ */
@@ -7368,7 +7368,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(56*128)
 
 /* ------------------------------ */
@@ -7390,7 +7390,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(57*128)
 
 /* ------------------------------ */
@@ -7412,7 +7412,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(58*128)
 
 /* ------------------------------ */
@@ -7434,7 +7434,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(59*128)
 
 /* ------------------------------ */
@@ -7456,7 +7456,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(60*128)
 
 /* ------------------------------ */
@@ -7478,7 +7478,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(61*128)
 
 /* ------------------------------ */
@@ -7500,7 +7500,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(62*128)
 
 /* ------------------------------ */
@@ -7522,7 +7522,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(63*128)
 
 /* ------------------------------ */
@@ -7544,7 +7544,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(64*128)
 
 /* ------------------------------ */
@@ -7566,7 +7566,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(65*128)
 
 /* ------------------------------ */
@@ -7588,7 +7588,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(66*128)
 
 /* ------------------------------ */
@@ -7610,7 +7610,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(67*128)
 
 /* ------------------------------ */
@@ -7632,7 +7632,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(68*128)
 
 /* ------------------------------ */
@@ -7654,7 +7654,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(69*128)
 
 /* ------------------------------ */
@@ -7676,7 +7676,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(70*128)
 
 /* ------------------------------ */
@@ -7698,7 +7698,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(71*128)
 
 /* ------------------------------ */
@@ -7720,7 +7720,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(72*128)
 
 /* ------------------------------ */
@@ -7742,7 +7742,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(73*128)
 
 /* ------------------------------ */
@@ -7764,7 +7764,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(74*128)
 
 /* ------------------------------ */
@@ -7786,7 +7786,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(75*128)
 
 /* ------------------------------ */
@@ -7808,7 +7808,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(76*128)
 
 /* ------------------------------ */
@@ -7830,7 +7830,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(77*128)
 
 /* ------------------------------ */
@@ -7852,7 +7852,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(78*128)
 
 /* ------------------------------ */
@@ -7874,7 +7874,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(79*128)
 
 /* ------------------------------ */
@@ -7896,7 +7896,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(80*128)
 
 /* ------------------------------ */
@@ -7918,7 +7918,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(81*128)
 
 /* ------------------------------ */
@@ -7940,7 +7940,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(82*128)
 
 /* ------------------------------ */
@@ -7962,7 +7962,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(83*128)
 
 /* ------------------------------ */
@@ -7984,7 +7984,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(84*128)
 
 /* ------------------------------ */
@@ -8006,7 +8006,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(85*128)
 
 /* ------------------------------ */
@@ -8028,7 +8028,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(86*128)
 
 /* ------------------------------ */
@@ -8050,7 +8050,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(87*128)
 
 /* ------------------------------ */
@@ -8072,7 +8072,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(88*128)
 
 /* ------------------------------ */
@@ -8094,7 +8094,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(89*128)
 
 /* ------------------------------ */
@@ -8116,7 +8116,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(90*128)
 
 /* ------------------------------ */
@@ -8138,7 +8138,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(91*128)
 
 /* ------------------------------ */
@@ -8160,7 +8160,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(92*128)
 
 /* ------------------------------ */
@@ -8182,7 +8182,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(93*128)
 
 /* ------------------------------ */
@@ -8204,7 +8204,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(94*128)
 
 /* ------------------------------ */
@@ -8226,7 +8226,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(95*128)
 
 /* ------------------------------ */
@@ -8248,7 +8248,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(96*128)
 
 /* ------------------------------ */
@@ -8270,7 +8270,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(97*128)
 
 /* ------------------------------ */
@@ -8292,7 +8292,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(98*128)
 
 /* ------------------------------ */
@@ -8314,7 +8314,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(99*128)
 
 /* ------------------------------ */
@@ -8336,7 +8336,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(100*128)
 
 /* ------------------------------ */
@@ -8358,7 +8358,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(101*128)
 
 /* ------------------------------ */
@@ -8380,7 +8380,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(102*128)
 
 /* ------------------------------ */
@@ -8402,7 +8402,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(103*128)
 
 /* ------------------------------ */
@@ -8424,7 +8424,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(104*128)
 
 /* ------------------------------ */
@@ -8446,7 +8446,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(105*128)
 
 /* ------------------------------ */
@@ -8468,7 +8468,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(106*128)
 
 /* ------------------------------ */
@@ -8490,7 +8490,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(107*128)
 
 /* ------------------------------ */
@@ -8512,7 +8512,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(108*128)
 
 /* ------------------------------ */
@@ -8534,7 +8534,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(109*128)
 
 /* ------------------------------ */
@@ -8556,7 +8556,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(110*128)
 
 /* ------------------------------ */
@@ -8578,7 +8578,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(111*128)
 
 /* ------------------------------ */
@@ -8600,7 +8600,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(112*128)
 
 /* ------------------------------ */
@@ -8622,7 +8622,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(113*128)
 
 /* ------------------------------ */
@@ -8644,7 +8644,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(114*128)
 
 /* ------------------------------ */
@@ -8666,7 +8666,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(115*128)
 
 /* ------------------------------ */
@@ -8688,7 +8688,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(116*128)
 
 /* ------------------------------ */
@@ -8710,7 +8710,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(117*128)
 
 /* ------------------------------ */
@@ -8732,7 +8732,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(118*128)
 
 /* ------------------------------ */
@@ -8754,7 +8754,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(119*128)
 
 /* ------------------------------ */
@@ -8776,7 +8776,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(120*128)
 
 /* ------------------------------ */
@@ -8798,7 +8798,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(121*128)
 
 /* ------------------------------ */
@@ -8820,7 +8820,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(122*128)
 
 /* ------------------------------ */
@@ -8842,7 +8842,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(123*128)
 
 /* ------------------------------ */
@@ -8864,7 +8864,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(124*128)
 
 /* ------------------------------ */
@@ -8886,7 +8886,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(125*128)
 
 /* ------------------------------ */
@@ -8908,7 +8908,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(126*128)
 
 /* ------------------------------ */
@@ -8930,7 +8930,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(127*128)
 
 /* ------------------------------ */
@@ -8952,7 +8952,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(128*128)
 
 /* ------------------------------ */
@@ -8974,7 +8974,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(129*128)
 
 /* ------------------------------ */
@@ -8996,7 +8996,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(130*128)
 
 /* ------------------------------ */
@@ -9018,7 +9018,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(131*128)
 
 /* ------------------------------ */
@@ -9040,7 +9040,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(132*128)
 
 /* ------------------------------ */
@@ -9062,7 +9062,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(133*128)
 
 /* ------------------------------ */
@@ -9084,7 +9084,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(134*128)
 
 /* ------------------------------ */
@@ -9106,7 +9106,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(135*128)
 
 /* ------------------------------ */
@@ -9128,7 +9128,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(136*128)
 
 /* ------------------------------ */
@@ -9150,7 +9150,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(137*128)
 
 /* ------------------------------ */
@@ -9172,7 +9172,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(138*128)
 
 /* ------------------------------ */
@@ -9194,7 +9194,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(139*128)
 
 /* ------------------------------ */
@@ -9216,7 +9216,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(140*128)
 
 /* ------------------------------ */
@@ -9238,7 +9238,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(141*128)
 
 /* ------------------------------ */
@@ -9260,7 +9260,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(142*128)
 
 /* ------------------------------ */
@@ -9282,7 +9282,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(143*128)
 
 /* ------------------------------ */
@@ -9304,7 +9304,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(144*128)
 
 /* ------------------------------ */
@@ -9326,7 +9326,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(145*128)
 
 /* ------------------------------ */
@@ -9348,7 +9348,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(146*128)
 
 /* ------------------------------ */
@@ -9370,7 +9370,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(147*128)
 
 /* ------------------------------ */
@@ -9392,7 +9392,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(148*128)
 
 /* ------------------------------ */
@@ -9414,7 +9414,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(149*128)
 
 /* ------------------------------ */
@@ -9436,7 +9436,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(150*128)
 
 /* ------------------------------ */
@@ -9458,7 +9458,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(151*128)
 
 /* ------------------------------ */
@@ -9480,7 +9480,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(152*128)
 
 /* ------------------------------ */
@@ -9502,7 +9502,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(153*128)
 
 /* ------------------------------ */
@@ -9524,7 +9524,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(154*128)
 
 /* ------------------------------ */
@@ -9546,7 +9546,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(155*128)
 
 /* ------------------------------ */
@@ -9568,7 +9568,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(156*128)
 
 /* ------------------------------ */
@@ -9590,7 +9590,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(157*128)
 
 /* ------------------------------ */
@@ -9612,7 +9612,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(158*128)
 
 /* ------------------------------ */
@@ -9634,7 +9634,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(159*128)
 
 /* ------------------------------ */
@@ -9656,7 +9656,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(160*128)
 
 /* ------------------------------ */
@@ -9678,7 +9678,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(161*128)
 
 /* ------------------------------ */
@@ -9700,7 +9700,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(162*128)
 
 /* ------------------------------ */
@@ -9722,7 +9722,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(163*128)
 
 /* ------------------------------ */
@@ -9744,7 +9744,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(164*128)
 
 /* ------------------------------ */
@@ -9766,7 +9766,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(165*128)
 
 /* ------------------------------ */
@@ -9788,7 +9788,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(166*128)
 
 /* ------------------------------ */
@@ -9810,7 +9810,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(167*128)
 
 /* ------------------------------ */
@@ -9832,7 +9832,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(168*128)
 
 /* ------------------------------ */
@@ -9854,7 +9854,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(169*128)
 
 /* ------------------------------ */
@@ -9876,7 +9876,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(170*128)
 
 /* ------------------------------ */
@@ -9898,7 +9898,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(171*128)
 
 /* ------------------------------ */
@@ -9920,7 +9920,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(172*128)
 
 /* ------------------------------ */
@@ -9942,7 +9942,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(173*128)
 
 /* ------------------------------ */
@@ -9964,7 +9964,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(174*128)
 
 /* ------------------------------ */
@@ -9986,7 +9986,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(175*128)
 
 /* ------------------------------ */
@@ -10008,7 +10008,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(176*128)
 
 /* ------------------------------ */
@@ -10030,7 +10030,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(177*128)
 
 /* ------------------------------ */
@@ -10052,7 +10052,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(178*128)
 
 /* ------------------------------ */
@@ -10074,7 +10074,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(179*128)
 
 /* ------------------------------ */
@@ -10096,7 +10096,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(180*128)
 
 /* ------------------------------ */
@@ -10118,7 +10118,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(181*128)
 
 /* ------------------------------ */
@@ -10140,7 +10140,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(182*128)
 
 /* ------------------------------ */
@@ -10162,7 +10162,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(183*128)
 
 /* ------------------------------ */
@@ -10184,7 +10184,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(184*128)
 
 /* ------------------------------ */
@@ -10206,7 +10206,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(185*128)
 
 /* ------------------------------ */
@@ -10228,7 +10228,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(186*128)
 
 /* ------------------------------ */
@@ -10250,7 +10250,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(187*128)
 
 /* ------------------------------ */
@@ -10272,7 +10272,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(188*128)
 
 /* ------------------------------ */
@@ -10294,7 +10294,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(189*128)
 
 /* ------------------------------ */
@@ -10316,7 +10316,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(190*128)
 
 /* ------------------------------ */
@@ -10338,7 +10338,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(191*128)
 
 /* ------------------------------ */
@@ -10360,7 +10360,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(192*128)
 
 /* ------------------------------ */
@@ -10382,7 +10382,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(193*128)
 
 /* ------------------------------ */
@@ -10404,7 +10404,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(194*128)
 
 /* ------------------------------ */
@@ -10426,7 +10426,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(195*128)
 
 /* ------------------------------ */
@@ -10448,7 +10448,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(196*128)
 
 /* ------------------------------ */
@@ -10470,7 +10470,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(197*128)
 
 /* ------------------------------ */
@@ -10492,7 +10492,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(198*128)
 
 /* ------------------------------ */
@@ -10514,7 +10514,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(199*128)
 
 /* ------------------------------ */
@@ -10536,7 +10536,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(200*128)
 
 /* ------------------------------ */
@@ -10558,7 +10558,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(201*128)
 
 /* ------------------------------ */
@@ -10580,7 +10580,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(202*128)
 
 /* ------------------------------ */
@@ -10602,7 +10602,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(203*128)
 
 /* ------------------------------ */
@@ -10624,7 +10624,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(204*128)
 
 /* ------------------------------ */
@@ -10646,7 +10646,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(205*128)
 
 /* ------------------------------ */
@@ -10668,7 +10668,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(206*128)
 
 /* ------------------------------ */
@@ -10690,7 +10690,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(207*128)
 
 /* ------------------------------ */
@@ -10712,7 +10712,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(208*128)
 
 /* ------------------------------ */
@@ -10734,7 +10734,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(209*128)
 
 /* ------------------------------ */
@@ -10756,7 +10756,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(210*128)
 
 /* ------------------------------ */
@@ -10778,7 +10778,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(211*128)
 
 /* ------------------------------ */
@@ -10800,7 +10800,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(212*128)
 
 /* ------------------------------ */
@@ -10822,7 +10822,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(213*128)
 
 /* ------------------------------ */
@@ -10844,7 +10844,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(214*128)
 
 /* ------------------------------ */
@@ -10866,7 +10866,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(215*128)
 
 /* ------------------------------ */
@@ -10888,7 +10888,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(216*128)
 
 /* ------------------------------ */
@@ -10910,7 +10910,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(217*128)
 
 /* ------------------------------ */
@@ -10932,7 +10932,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(218*128)
 
 /* ------------------------------ */
@@ -10954,7 +10954,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(219*128)
 
 /* ------------------------------ */
@@ -10976,7 +10976,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(220*128)
 
 /* ------------------------------ */
@@ -10998,7 +10998,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(221*128)
 
 /* ------------------------------ */
@@ -11020,7 +11020,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(222*128)
 
 /* ------------------------------ */
@@ -11042,7 +11042,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(223*128)
 
 /* ------------------------------ */
@@ -11064,7 +11064,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(224*128)
 
 /* ------------------------------ */
@@ -11086,7 +11086,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(225*128)
 
 /* ------------------------------ */
@@ -11108,7 +11108,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(226*128)
 
 /* ------------------------------ */
@@ -11130,7 +11130,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(227*128)
 
 /* ------------------------------ */
@@ -11152,7 +11152,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(228*128)
 
 /* ------------------------------ */
@@ -11174,7 +11174,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(229*128)
 
 /* ------------------------------ */
@@ -11196,7 +11196,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(230*128)
 
 /* ------------------------------ */
@@ -11218,7 +11218,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(231*128)
 
 /* ------------------------------ */
@@ -11240,7 +11240,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(232*128)
 
 /* ------------------------------ */
@@ -11262,7 +11262,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(233*128)
 
 /* ------------------------------ */
@@ -11284,7 +11284,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(234*128)
 
 /* ------------------------------ */
@@ -11306,7 +11306,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(235*128)
 
 /* ------------------------------ */
@@ -11328,7 +11328,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(236*128)
 
 /* ------------------------------ */
@@ -11350,7 +11350,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(237*128)
 
 /* ------------------------------ */
@@ -11372,7 +11372,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(238*128)
 
 /* ------------------------------ */
@@ -11394,7 +11394,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(239*128)
 
 /* ------------------------------ */
@@ -11416,7 +11416,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(240*128)
 
 /* ------------------------------ */
@@ -11438,7 +11438,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(241*128)
 
 /* ------------------------------ */
@@ -11460,7 +11460,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(242*128)
 
 /* ------------------------------ */
@@ -11482,7 +11482,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(243*128)
 
 /* ------------------------------ */
@@ -11504,7 +11504,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(244*128)
 
 /* ------------------------------ */
@@ -11526,7 +11526,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(245*128)
 
 /* ------------------------------ */
@@ -11548,7 +11548,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(246*128)
 
 /* ------------------------------ */
@@ -11570,7 +11570,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(247*128)
 
 /* ------------------------------ */
@@ -11592,7 +11592,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(248*128)
 
 /* ------------------------------ */
@@ -11614,7 +11614,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(249*128)
 
 /* ------------------------------ */
@@ -11636,7 +11636,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(250*128)
 
 /* ------------------------------ */
@@ -11658,7 +11658,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(251*128)
 
 /* ------------------------------ */
@@ -11680,7 +11680,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(252*128)
 
 /* ------------------------------ */
@@ -11702,7 +11702,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(253*128)
 
 /* ------------------------------ */
@@ -11724,7 +11724,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(254*128)
 
 /* ------------------------------ */
@@ -11746,7 +11746,7 @@ SYMBOL(artMterpAsmAltInstructionStart) = .L_ALT_op_nop
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rPC, OUT_ARG2
-    call    SYMBOL(MterpCheckBefore)        # (self, shadow_frame, dex_pc_ptr)
+    call    SYMBOL(MterpCheckBefore)@PLT        # (self, shadow_frame, dex_pc_ptr)
     jmp     .L_op_nop+(255*128)
 
     .balign 128
@@ -11773,7 +11773,7 @@ common_errDivideByZero:
 #if MTERP_LOGGING
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
-    call    SYMBOL(MterpLogDivideByZeroException)
+    call    SYMBOL(MterpLogDivideByZeroException)@PLT
 #endif
     jmp     MterpCommonFallback
 
@@ -11782,7 +11782,7 @@ common_errArrayIndex:
 #if MTERP_LOGGING
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
-    call    SYMBOL(MterpLogArrayIndexException)
+    call    SYMBOL(MterpLogArrayIndexException)@PLT
 #endif
     jmp     MterpCommonFallback
 
@@ -11791,7 +11791,7 @@ common_errNegativeArraySize:
 #if MTERP_LOGGING
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
-    call    SYMBOL(MterpLogNegativeArraySizeException)
+    call    SYMBOL(MterpLogNegativeArraySizeException)@PLT
 #endif
     jmp     MterpCommonFallback
 
@@ -11800,7 +11800,7 @@ common_errNoSuchMethod:
 #if MTERP_LOGGING
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
-    call    SYMBOL(MterpLogNoSuchMethodException)
+    call    SYMBOL(MterpLogNoSuchMethodException)@PLT
 #endif
     jmp     MterpCommonFallback
 
@@ -11809,7 +11809,7 @@ common_errNullObject:
 #if MTERP_LOGGING
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
-    call    SYMBOL(MterpLogNullObjectException)
+    call    SYMBOL(MterpLogNullObjectException)@PLT
 #endif
     jmp     MterpCommonFallback
 
@@ -11818,7 +11818,7 @@ common_exceptionThrown:
 #if MTERP_LOGGING
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
-    call    SYMBOL(MterpLogExceptionThrownException)
+    call    SYMBOL(MterpLogExceptionThrownException)@PLT
 #endif
     jmp     MterpCommonFallback
 
@@ -11828,7 +11828,7 @@ MterpSuspendFallback:
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movl    THREAD_FLAGS_OFFSET(OUT_ARG0), OUT_32_ARG2
-    call    SYMBOL(MterpLogSuspendFallback)
+    call    SYMBOL(MterpLogSuspendFallback)@PLT
 #endif
     jmp     MterpCommonFallback
 
@@ -11851,7 +11851,7 @@ MterpPossibleException:
 MterpException:
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
-    call    SYMBOL(MterpHandleException)
+    call    SYMBOL(MterpHandleException)@PLT
     testb   %al, %al
     jz      MterpExceptionReturn
     movq    OFF_FP_CODE_ITEM(rFP), %rax
@@ -11860,7 +11860,7 @@ MterpException:
     leaq    (rPC, %rcx, 2), rPC
     movq    rPC, OFF_FP_DEX_PC_PTR(rFP)
     /* Do we need to switch interpreters? */
-    call    SYMBOL(MterpShouldSwitchInterpreters)
+    call    SYMBOL(MterpShouldSwitchInterpreters)@PLT
     testb   %al, %al
     jnz     MterpFallback
     /* resume execution at catch block */
@@ -11917,7 +11917,7 @@ MterpCommonTakenBranch:
 .L_suspend_request_pending:
     EXPORT_PC
     movq    rSELF, OUT_ARG0
-    call    SYMBOL(MterpSuspendCheck)       # (self)
+    call    SYMBOL(MterpSuspendCheck)@PLT       # (self)
     testb   %al, %al
     jnz     MterpFallback
     REFRESH_IBASE                           # might have changed during suspend
@@ -11931,7 +11931,7 @@ MterpCommonTakenBranch:
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rINSTq, OUT_ARG2
-    call    SYMBOL(MterpMaybeDoOnStackReplacement) # (self, shadow_frame, offset)
+    call    SYMBOL(MterpMaybeDoOnStackReplacement)@PLT # (self, shadow_frame, offset)
     testb   %al, %al
     jz      .L_resume_backward_branch
     jmp     MterpOnStackReplacement
@@ -11949,7 +11949,7 @@ MterpCommonTakenBranch:
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movq    rINSTq, OUT_ARG2
-    call    SYMBOL(MterpMaybeDoOnStackReplacement) # (self, shadow_frame, offset)
+    call    SYMBOL(MterpMaybeDoOnStackReplacement)@PLT # (self, shadow_frame, offset)
     testb   %al, %al
     jz      .L_resume_forward_branch
     jmp     MterpOnStackReplacement
@@ -11960,7 +11960,7 @@ MterpCommonTakenBranch:
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movw    %ax, OFF_FP_COUNTDOWN_OFFSET(rFP)
     movq    rSELF, OUT_ARG2
-    call    SYMBOL(MterpAddHotnessBatch)    # (method, shadow_frame, self)
+    call    SYMBOL(MterpAddHotnessBatch)@PLT    # (method, shadow_frame, self)
     movswl  %ax, rPROFILE
     jmp     .L_no_count_backwards
 
@@ -11973,7 +11973,7 @@ MterpCommonTakenBranch:
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movl    $2, OUT_32_ARG2
-    call    SYMBOL(MterpMaybeDoOnStackReplacement) # (self, shadow_frame, offset)
+    call    SYMBOL(MterpMaybeDoOnStackReplacement)@PLT # (self, shadow_frame, offset)
     testb   %al, %al
     jnz     MterpOnStackReplacement
     ADVANCE_PC_FETCH_AND_GOTO_NEXT 2
@@ -11986,7 +11986,7 @@ MterpOnStackReplacement:
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movl    rINST, OUT_32_ARG2
-    call    SYMBOL(MterpLogOSR)
+    call    SYMBOL(MterpLogOSR)@PLT
 #endif
     movl    $1, %eax
     jmp     MterpDone
@@ -11999,7 +11999,7 @@ MterpFallback:
 #if MTERP_LOGGING
     movq    rSELF, OUT_ARG0
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
-    call    SYMBOL(MterpLogFallback)
+    call    SYMBOL(MterpLogFallback)@PLT
 #endif
 MterpCommonFallback:
     xorl    %eax, %eax
@@ -12034,7 +12034,7 @@ MterpDone:
     leaq    OFF_FP_SHADOWFRAME(rFP), OUT_ARG1
     movw    %ax, OFF_FP_COUNTDOWN_OFFSET(rFP)
     movq    rSELF, OUT_ARG2
-    call    SYMBOL(MterpAddHotnessBatch)    # (method, shadow_frame, self)
+    call    SYMBOL(MterpAddHotnessBatch)@PLT    # (method, shadow_frame, self)
     movl    rINST, %eax                     # restore return value
 
     /* pop up frame */
