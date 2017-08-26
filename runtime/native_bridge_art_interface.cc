@@ -100,7 +100,7 @@ bool LoadNativeBridge(const std::string& native_bridge_library_filename) {
 
 void PreInitializeNativeBridge(const std::string& dir) {
   VLOG(startup) << "Runtime::Pre-initialize native bridge";
-#ifndef __APPLE__  // Mac OS does not support CLONE_NEWNS.
+#if !defined(__APPLE__) && !defined(__GENODE__)  // Mac OS and Genode do not support CLONE_NEWNS.
   if (unshare(CLONE_NEWNS) == -1) {
     LOG(WARNING) << "Could not create mount namespace.";
   }
