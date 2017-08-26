@@ -18,6 +18,7 @@
 
 #include <ostream>
 #include <utility>
+#include <algorithm>
 
 #include "logging.h"
 
