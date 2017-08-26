@@ -402,7 +402,7 @@ void DumpKernelStack(std::ostream& os, pid_t tid, const char* prefix, bool inclu
   }
 }
 
-#elif defined(__APPLE__)
+#elif defined(__APPLE__) || defined(__GENODE__)
 
 void DumpNativeStack(std::ostream& os ATTRIBUTE_UNUSED,
                      pid_t tid ATTRIBUTE_UNUSED,
