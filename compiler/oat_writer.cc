@@ -21,7 +21,7 @@
 
 #include "arch/arm64/instruction_set_features_arm64.h"
 #include "art_method-inl.h"
-#include "base/allocator.h"
+#include "base/Xallocator.h"
 #include "base/bit_vector.h"
 #include "base/enums.h"
 #include "base/file_magic.h"

@@ -26,7 +26,7 @@
 #include "art_field-inl.h"
 #include "art_method-inl.h"
 #include "atomic.h"
-#include "base/allocator.h"
+#include "base/Xallocator.h"
 #include "base/enums.h"
 #include "base/logging.h"
 #include "base/mutex.h"

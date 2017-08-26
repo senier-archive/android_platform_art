@@ -17,7 +17,7 @@
 #ifndef ART_RUNTIME_GC_ACCOUNTING_HEAP_BITMAP_H_
 #define ART_RUNTIME_GC_ACCOUNTING_HEAP_BITMAP_H_
 
-#include "base/allocator.h"
+#include "base/Xallocator.h"
 #include "base/logging.h"
 #include "object_callbacks.h"
 #include "space_bitmap.h"
