@@ -130,6 +130,8 @@ pid_t GetTid() {
   return owner;
 #elif defined(__BIONIC__)
   return gettid();
+#elif defined(__GENODE__)
+  return 42;
 #else
   return syscall(__NR_gettid);
 #endif
