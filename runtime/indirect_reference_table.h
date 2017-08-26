@@ -350,7 +350,7 @@ class IndirectReferenceTable {
     return static_cast<uint32_t>(uref >> kKindBits) & kShiftedSerialMask;
   }
 
-  constexpr uintptr_t EncodeIndirectRef(uint32_t table_index, uint32_t serial) const {
+  uintptr_t EncodeIndirectRef(uint32_t table_index, uint32_t serial) const {
     DCHECK_LT(table_index, max_entries_);
     return EncodeIndex(table_index) | EncodeSerial(serial) | EncodeIndirectRefKind(kind_);
   }
