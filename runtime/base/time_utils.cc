@@ -24,7 +24,7 @@
 
 #include "base/logging.h"
 
-#if defined(__APPLE__)
+#if defined(__APPLE__) || defined(__GENODE__)
 #include <sys/time.h>
 #endif
 
