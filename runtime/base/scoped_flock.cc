@@ -16,6 +16,7 @@
 
 #include "scoped_flock.h"
 
+#include <string.h>
 #include <sys/file.h>
 #include <sys/stat.h>
 
