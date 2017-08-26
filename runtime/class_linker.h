@@ -24,6 +24,7 @@
 #include <utility>
 #include <vector>
 
+#include "base/Xallocator.h"
 #include "base/enums.h"
 #include "base/macros.h"
 #include "base/mutex.h"

@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 
-#include "base/allocator.h"
+#include "base/Xallocator.h"
 #include "base/mutex.h"
 #include "gc_root.h"
 #include "obj_ptr.h"

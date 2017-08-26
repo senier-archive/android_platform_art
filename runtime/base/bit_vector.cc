@@ -19,7 +19,7 @@
 #include <limits>
 #include <sstream>
 
-#include "allocator.h"
+#include "Xallocator.h"
 #include "bit_vector-inl.h"
 
 namespace art {

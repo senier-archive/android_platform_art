@@ -25,6 +25,12 @@
 #include <string>
 
 #include "android-base/thread_annotations.h"
+#include <stddef.h>
+#include <sys/mman.h>  // For the PROT_* and MAP_* constants.
+#include <sys/types.h>
+
+#include "base/Xallocator.h"
+#include "globals.h"
 
 namespace art {
 

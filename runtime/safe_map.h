@@ -21,7 +21,7 @@
 #include <memory>
 #include <type_traits>
 
-#include "base/allocator.h"
+#include "base/Xallocator.h"
 #include "base/logging.h"
 
 namespace art {
