@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+// To enable UINTPTR_MAX on Genode's libc
+#define __STDC_LIMIT_MACROS 1
+
 #include "oat_quick_method_header.h"
 
 #include "art_method.h"
