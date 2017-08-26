@@ -99,7 +99,7 @@ static void SetUpArtAction(struct sigaction* action) {
   action->sa_sigaction = art_fault_handler;
   sigemptyset(&action->sa_mask);
   action->sa_flags = SA_SIGINFO | SA_ONSTACK;
-#if !defined(__APPLE__) && !defined(__mips__)
+#if !defined(__APPLE__) && !defined(__mips__) && !defined(__GENODE__)
   action->sa_restorer = nullptr;
 #endif
 }
@@ -192,7 +192,7 @@ bool FaultManager::HandleFaultByOtherHandlers(int sig, siginfo_t* info, void* co
   }
 
   action.sa_flags = SA_SIGINFO | SA_ONSTACK;
-#if !defined(__APPLE__) && !defined(__mips__)
+#if !defined(__APPLE__) && !defined(__mips__) && !defined(__GENODE__)
   action.sa_restorer = nullptr;
 #endif
 
