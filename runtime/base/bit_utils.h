@@ -33,7 +33,7 @@ constexpr int CLZ(T x) {
   static_assert(std::is_unsigned<T>::value, "T must be unsigned");
   static_assert(sizeof(T) <= sizeof(long long),  // NOLINT [runtime/int] [4]
                 "T too large, must be smaller than long long");
-  DCHECK_NE(x, 0u);
+  //DCHECK_NE(x, 0u);
   return (sizeof(T) == sizeof(uint32_t)) ? __builtin_clz(x) : __builtin_clzll(x);
 }
 
