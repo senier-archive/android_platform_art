@@ -782,6 +782,8 @@ void SetThreadName(const char* thread_name) {
   if (errno != 0) {
     PLOG(WARNING) << "Unable to set the name of current thread to '" << buf << "'";
   }
+#elif defined(__GENODE__)
+  // Unsupported, do nothing.
 #else  // __APPLE__
   pthread_setname_np(thread_name);
 #endif
