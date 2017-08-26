@@ -343,7 +343,7 @@ class IndirectReferenceTable {
   }
 
   static constexpr uintptr_t EncodeSerial(uint32_t serial) {
-    DCHECK_LE(MinimumBitsToStore(serial), kSerialBits);
+    //DCHECK_LE(MinimumBitsToStore(serial), kSerialBits);
     return serial << kKindBits;
   }
   static constexpr uint32_t DecodeSerial(uintptr_t uref) {
