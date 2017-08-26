@@ -414,7 +414,7 @@ END_MACRO
 MACRO0(DELIVER_PENDING_EXCEPTION_FRAME_READY)
     // (Thread*) setup
     movq %gs:THREAD_SELF_OFFSET, %rdi
-    call SYMBOL(artDeliverPendingExceptionFromCode)  // artDeliverPendingExceptionFromCode(Thread*)
+    call SYMBOL(artDeliverPendingExceptionFromCode)@PLT  // artDeliverPendingExceptionFromCode(Thread*)
     UNREACHABLE
 END_MACRO
 
@@ -432,7 +432,7 @@ MACRO2(NO_ARG_RUNTIME_EXCEPTION, c_name, cxx_name)
     SETUP_SAVE_ALL_CALLEE_SAVES_FRAME  // save all registers as basis for long jump context
     // Outgoing argument set up
     movq %gs:THREAD_SELF_OFFSET, %rdi  // pass Thread::Current()
-    call CALLVAR(cxx_name)             // cxx_name(Thread*)
+    call CALLVAR(cxx_name)@PLT             // cxx_name(Thread*)
     UNREACHABLE
     END_FUNCTION VAR(c_name)
 END_MACRO
@@ -442,7 +442,7 @@ MACRO2(NO_ARG_RUNTIME_EXCEPTION_SAVE_EVERYTHING, c_name, cxx_name)
     SETUP_SAVE_EVERYTHING_FRAME        // save all registers as basis for long jump context
     // Outgoing argument set up
     movq %gs:THREAD_SELF_OFFSET, %rdi  // pass Thread::Current()
-    call CALLVAR(cxx_name)             // cxx_name(Thread*)
+    call CALLVAR(cxx_name)@PLT             // cxx_name(Thread*)
     UNREACHABLE
     END_FUNCTION VAR(c_name)
 END_MACRO
@@ -452,7 +452,7 @@ MACRO2(ONE_ARG_RUNTIME_EXCEPTION, c_name, cxx_name)
     SETUP_SAVE_ALL_CALLEE_SAVES_FRAME  // save all registers as basis for long jump context
     // Outgoing argument set up
     movq %gs:THREAD_SELF_OFFSET, %rsi  // pass Thread::Current()
-    call CALLVAR(cxx_name)             // cxx_name(arg1, Thread*)
+    call CALLVAR(cxx_name)@PLT             // cxx_name(arg1, Thread*)
     UNREACHABLE
     END_FUNCTION VAR(c_name)
 END_MACRO
@@ -462,7 +462,7 @@ MACRO2(TWO_ARG_RUNTIME_EXCEPTION_SAVE_EVERYTHING, c_name, cxx_name)
     SETUP_SAVE_EVERYTHING_FRAME        // save all registers as basis for long jump context
     // Outgoing argument set up
     movq %gs:THREAD_SELF_OFFSET, %rdx  // pass Thread::Current()
-    call CALLVAR(cxx_name)             // cxx_name(Thread*)
+    call CALLVAR(cxx_name)@PLT             // cxx_name(Thread*)
     UNREACHABLE
     END_FUNCTION VAR(c_name)
 END_MACRO
@@ -485,7 +485,7 @@ DEFINE_FUNCTION_CUSTOM_CFA art_quick_throw_null_pointer_exception_from_signal, 2
     CFI_REL_OFFSET(%r15, (FRAME_SIZE_SAVE_EVERYTHING - 2 * __SIZEOF_POINTER__))
     // Outgoing argument set up; RDI already contains the fault address.
     movq %gs:THREAD_SELF_OFFSET, %rsi  // pass Thread::Current()
-    call SYMBOL(artThrowNullPointerExceptionFromSignal)  // (addr, self)
+    call SYMBOL(artThrowNullPointerExceptionFromSignal)@PLT  // (addr, self)
     UNREACHABLE
 END_FUNCTION art_quick_throw_null_pointer_exception_from_signal
 
@@ -542,7 +542,7 @@ MACRO1(INVOKE_TRAMPOLINE_BODY, cxx_name)
     movq %gs:THREAD_SELF_OFFSET, %rdx                      // pass Thread
     movq %rsp, %rcx                                        // pass SP
 
-    call CALLVAR(cxx_name)                                 // cxx_name(arg1, arg2, Thread*, SP)
+    call CALLVAR(cxx_name)@PLT                                 // cxx_name(arg1, arg2, Thread*, SP)
                                                            // save the code pointer
     movq %rax, %rdi
     movq %rdx, %rax
@@ -878,7 +878,7 @@ MACRO3(ONE_ARG_DOWNCALL, c_name, cxx_name, return_macro)
     SETUP_SAVE_REFS_ONLY_FRAME           // save ref containing registers for GC
     // Outgoing argument set up
     movq %gs:THREAD_SELF_OFFSET, %rsi    // pass Thread::Current()
-    call CALLVAR(cxx_name)               // cxx_name(arg0, Thread*)
+    call CALLVAR(cxx_name)@PLT               // cxx_name(arg0, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME         // restore frame up to return address
     CALL_MACRO(return_macro)             // return or deliver exception
     END_FUNCTION VAR(c_name)
@@ -889,7 +889,7 @@ MACRO3(TWO_ARG_DOWNCALL, c_name, cxx_name, return_macro)
     SETUP_SAVE_REFS_ONLY_FRAME           // save ref containing registers for GC
     // Outgoing argument set up
     movq %gs:THREAD_SELF_OFFSET, %rdx    // pass Thread::Current()
-    call CALLVAR(cxx_name)               // cxx_name(arg0, arg1, Thread*)
+    call CALLVAR(cxx_name)@PLT               // cxx_name(arg0, arg1, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME         // restore frame up to return address
     CALL_MACRO(return_macro)             // return or deliver exception
     END_FUNCTION VAR(c_name)
@@ -900,7 +900,7 @@ MACRO3(THREE_ARG_DOWNCALL, c_name, cxx_name, return_macro)
     SETUP_SAVE_REFS_ONLY_FRAME          // save ref containing registers for GC
     // Outgoing argument set up
     movq %gs:THREAD_SELF_OFFSET, %rcx   // pass Thread::Current()
-    call CALLVAR(cxx_name)              // cxx_name(arg0, arg1, arg2, Thread*)
+    call CALLVAR(cxx_name)@PLT              // cxx_name(arg0, arg1, arg2, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME        // restore frame up to return address
     CALL_MACRO(return_macro)            // return or deliver exception
     END_FUNCTION VAR(c_name)
@@ -911,7 +911,7 @@ MACRO3(FOUR_ARG_DOWNCALL, c_name, cxx_name, return_macro)
     SETUP_SAVE_REFS_ONLY_FRAME          // save ref containing registers for GC
     // Outgoing argument set up
     movq %gs:THREAD_SELF_OFFSET, %r8    // pass Thread::Current()
-    call CALLVAR(cxx_name)              // cxx_name(arg1, arg2, arg3, arg4, Thread*)
+    call CALLVAR(cxx_name)@PLT              // cxx_name(arg1, arg2, arg3, arg4, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME        // restore frame up to return address
     CALL_MACRO(return_macro)            // return or deliver exception
     END_FUNCTION VAR(c_name)
@@ -922,7 +922,7 @@ MACRO3(ONE_ARG_REF_DOWNCALL, c_name, cxx_name, return_macro)
     SETUP_SAVE_REFS_ONLY_FRAME
                                         // arg0 is in rdi
     movq %gs:THREAD_SELF_OFFSET, %rsi   // pass Thread::Current()
-    call CALLVAR(cxx_name)              // cxx_name(arg0, Thread*)
+    call CALLVAR(cxx_name)@PLT              // cxx_name(arg0, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME        // restore frame up to return address
     CALL_MACRO(return_macro)
     END_FUNCTION VAR(c_name)
@@ -933,7 +933,7 @@ MACRO3(TWO_ARG_REF_DOWNCALL, c_name, cxx_name, return_macro)
     SETUP_SAVE_REFS_ONLY_FRAME
                                         // arg0 and arg1 are in rdi/rsi
     movq %gs:THREAD_SELF_OFFSET, %rdx   // pass Thread::Current()
-    call CALLVAR(cxx_name)              // (arg0, arg1, Thread*)
+    call CALLVAR(cxx_name)@PLT              // (arg0, arg1, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME        // restore frame up to return address
     CALL_MACRO(return_macro)
     END_FUNCTION VAR(c_name)
@@ -944,7 +944,7 @@ MACRO3(THREE_ARG_REF_DOWNCALL, c_name, cxx_name, return_macro)
     SETUP_SAVE_REFS_ONLY_FRAME
                                         // arg0, arg1, and arg2 are in rdi/rsi/rdx
     movq %gs:THREAD_SELF_OFFSET, %rcx   // pass Thread::Current()
-    call CALLVAR(cxx_name)              // cxx_name(arg0, arg1, arg2, Thread*)
+    call CALLVAR(cxx_name)@PLT              // cxx_name(arg0, arg1, arg2, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME        // restore frame up to return address
     CALL_MACRO(return_macro)            // return or deliver exception
     END_FUNCTION VAR(c_name)
@@ -957,7 +957,7 @@ MACRO2(ONE_ARG_SAVE_EVERYTHING_DOWNCALL, c_name, cxx_name)
     // Outgoing argument set up
     movl %eax, %edi                               // pass string index
     movq %gs:THREAD_SELF_OFFSET, %rsi             // pass Thread::Current()
-    call CALLVAR(cxx_name)                        // cxx_name(arg0, Thread*)
+    call CALLVAR(cxx_name)@PLT                        // cxx_name(arg0, Thread*)
     testl %eax, %eax                              // If result is null, deliver the OOME.
     jz 1f
     CFI_REMEMBER_STATE
@@ -1088,7 +1088,7 @@ MACRO2(ART_QUICK_ALLOC_OBJECT_ROSALLOC, c_name, cxx_name)
     SETUP_SAVE_REFS_ONLY_FRAME                             // save ref containing registers for GC
     // Outgoing argument set up
     movq %gs:THREAD_SELF_OFFSET, %rsi                      // pass Thread::Current()
-    call CALLVAR(cxx_name)                                 // cxx_name(arg0, Thread*)
+    call CALLVAR(cxx_name)@PLT                                 // cxx_name(arg0, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME                           // restore frame up to return address
     RETURN_IF_RESULT_IS_NON_ZERO_OR_DELIVER                // return or deliver exception
     END_FUNCTION VAR(c_name)
@@ -1160,7 +1160,7 @@ MACRO1(ALLOC_OBJECT_TLAB_SLOW_PATH, cxx_name)
     SETUP_SAVE_REFS_ONLY_FRAME                             // save ref containing registers for GC
     // Outgoing argument set up
     movq %gs:THREAD_SELF_OFFSET, %rsi                      // pass Thread::Current()
-    call CALLVAR(cxx_name)                                 // cxx_name(arg0, Thread*)
+    call CALLVAR(cxx_name)@PLT                                 // cxx_name(arg0, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME                           // restore frame up to return address
     RETURN_IF_RESULT_IS_NON_ZERO_OR_DELIVER                // return or deliver exception
 END_MACRO
@@ -1248,7 +1248,7 @@ MACRO3(GENERATE_ALLOC_ARRAY_TLAB, c_entrypoint, cxx_name, size_setup)
     SETUP_SAVE_REFS_ONLY_FRAME                                 // save ref containing registers for GC
     // Outgoing argument set up
     movq %gs:THREAD_SELF_OFFSET, %rdx                          // pass Thread::Current()
-    call CALLVAR(cxx_name)                                     // cxx_name(arg0, arg1, Thread*)
+    call CALLVAR(cxx_name)@PLT                                     // cxx_name(arg0, arg1, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME                               // restore frame up to return address
     RETURN_IF_RESULT_IS_NON_ZERO_OR_DELIVER                    // return or deliver exception
     END_FUNCTION VAR(c_entrypoint)
@@ -1333,7 +1333,7 @@ DEFINE_FUNCTION art_quick_lock_object
 .Lslow_lock:
     SETUP_SAVE_REFS_ONLY_FRAME
     movq %gs:THREAD_SELF_OFFSET, %rsi     // pass Thread::Current()
-    call SYMBOL(artLockObjectFromCode)    // artLockObjectFromCode(object, Thread*)
+    call SYMBOL(artLockObjectFromCode)@PLT    // artLockObjectFromCode(object, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME          // restore frame up to return address
     RETURN_IF_EAX_ZERO
 END_FUNCTION art_quick_lock_object
@@ -1341,7 +1341,7 @@ END_FUNCTION art_quick_lock_object
 DEFINE_FUNCTION art_quick_lock_object_no_inline
     SETUP_SAVE_REFS_ONLY_FRAME
     movq %gs:THREAD_SELF_OFFSET, %rsi     // pass Thread::Current()
-    call SYMBOL(artLockObjectFromCode)    // artLockObjectFromCode(object, Thread*)
+    call SYMBOL(artLockObjectFromCode)@PLT    // artLockObjectFromCode(object, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME          // restore frame up to return address
     RETURN_IF_EAX_ZERO
 END_FUNCTION art_quick_lock_object_no_inline
@@ -1384,7 +1384,7 @@ DEFINE_FUNCTION art_quick_unlock_object
 .Lslow_unlock:
     SETUP_SAVE_REFS_ONLY_FRAME
     movq %gs:THREAD_SELF_OFFSET, %rsi     // pass Thread::Current()
-    call SYMBOL(artUnlockObjectFromCode)  // artUnlockObjectFromCode(object, Thread*)
+    call SYMBOL(artUnlockObjectFromCode)@PLT  // artUnlockObjectFromCode(object, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME          // restore frame up to return address
     RETURN_IF_EAX_ZERO
 END_FUNCTION art_quick_unlock_object
@@ -1392,7 +1392,7 @@ END_FUNCTION art_quick_unlock_object
 DEFINE_FUNCTION art_quick_unlock_object_no_inline
     SETUP_SAVE_REFS_ONLY_FRAME
     movq %gs:THREAD_SELF_OFFSET, %rsi     // pass Thread::Current()
-    call SYMBOL(artUnlockObjectFromCode)  // artUnlockObjectFromCode(object, Thread*)
+    call SYMBOL(artUnlockObjectFromCode)@PLT  // artUnlockObjectFromCode(object, Thread*)
     RESTORE_SAVE_REFS_ONLY_FRAME          // restore frame up to return address
     RETURN_IF_EAX_ZERO
 END_FUNCTION art_quick_unlock_object_no_inline
@@ -1404,7 +1404,7 @@ DEFINE_FUNCTION art_quick_check_instance_of
     subq LITERAL(8), %rsp             // Alignment padding.
     CFI_ADJUST_CFA_OFFSET(8)
     SETUP_FP_CALLEE_SAVE_FRAME
-    call SYMBOL(artInstanceOfFromCode)  // (Object* obj, Class* ref_klass)
+    call SYMBOL(artInstanceOfFromCode)@PLT  // (Object* obj, Class* ref_klass)
     testq %rax, %rax
     jz 1f                             // jump forward if not assignable
     RESTORE_FP_CALLEE_SAVE_FRAME
@@ -1423,7 +1423,7 @@ DEFINE_FUNCTION art_quick_check_instance_of
     POP rdi
     SETUP_SAVE_ALL_CALLEE_SAVES_FRAME // save all registers as basis for long jump context
     mov %gs:THREAD_SELF_OFFSET, %rdx  // pass Thread::Current()
-    call SYMBOL(artThrowClassCastExceptionForObject)  // (Object* src, Class* dest, Thread*)
+    call SYMBOL(artThrowClassCastExceptionForObject)@PLT  // (Object* src, Class* dest, Thread*)
     UNREACHABLE
 END_FUNCTION art_quick_check_instance_of
 
@@ -1462,7 +1462,7 @@ MACRO4(READ_BARRIER, obj_reg, offset, dest_reg32, dest_reg64)
     // movq REG_VAR(obj_reg), %rsi
     movl MACRO_LITERAL((RAW_VAR(offset))), %edx // pass offset, double parentheses are necessary
     // movq MACRO_LITERAL((RAW_VAR(offset))), %rdx
-    call SYMBOL(artReadBarrierSlow)     // artReadBarrierSlow(ref, obj_reg, offset)
+    call SYMBOL(artReadBarrierSlow)@PLT     // artReadBarrierSlow(ref, obj_reg, offset)
     // No need to unpoison return value in rax, artReadBarrierSlow() would do the unpoisoning.
     .ifnc RAW_VAR(dest_reg32), eax
     // .ifnc RAW_VAR(dest_reg64), rax
@@ -1529,7 +1529,7 @@ DEFINE_FUNCTION art_quick_aput_obj
 #endif
     movq %rcx, %rdi               // Pass arg1 = array's component type.
 
-    call SYMBOL(artIsAssignableFromCode)  // (Class* a, Class* b)
+    call SYMBOL(artIsAssignableFromCode)@PLT  // (Class* a, Class* b)
 
     // Exception?
     testq %rax, %rax
@@ -1564,7 +1564,7 @@ DEFINE_FUNCTION art_quick_aput_obj
     movq %rdx, %rsi                         // Pass arg 2 = value.
     movq %gs:THREAD_SELF_OFFSET, %rdx       // Pass arg 3 = Thread::Current().
                                             // Pass arg 1 = array.
-    call SYMBOL(artThrowArrayStoreException) // (array, value, Thread*)
+    call SYMBOL(artThrowArrayStoreException)@PLT // (array, value, Thread*)
     UNREACHABLE
 END_FUNCTION art_quick_aput_obj
 
@@ -1578,7 +1578,7 @@ DEFINE_FUNCTION art_quick_test_suspend
     SETUP_SAVE_EVERYTHING_FRAME                 // save everything for GC
     // Outgoing argument set up
     movq %gs:THREAD_SELF_OFFSET, %rdi           // pass Thread::Current()
-    call SYMBOL(artTestSuspendFromCode)         // (Thread*)
+    call SYMBOL(artTestSuspendFromCode)@PLT         // (Thread*)
     RESTORE_SAVE_EVERYTHING_FRAME               // restore frame up to return address
     ret
 END_FUNCTION art_quick_test_suspend
@@ -1623,7 +1623,7 @@ DEFINE_FUNCTION art_quick_proxy_invoke_handler
 
     movq %gs:THREAD_SELF_OFFSET, %rdx       // Pass Thread::Current().
     movq %rsp, %rcx                         // Pass SP.
-    call SYMBOL(artQuickProxyInvokeHandler) // (proxy method, receiver, Thread*, SP)
+    call SYMBOL(artQuickProxyInvokeHandler)@PLT // (proxy method, receiver, Thread*, SP)
     RESTORE_SAVE_REFS_AND_ARGS_FRAME
     movq %rax, %xmm0                        // Copy return value in case of float returns.
     RETURN_OR_DELIVER_PENDING_EXCEPTION
@@ -1670,7 +1670,7 @@ DEFINE_FUNCTION art_quick_resolution_trampoline
     SETUP_SAVE_REFS_AND_ARGS_FRAME
     movq %gs:THREAD_SELF_OFFSET, %rdx
     movq %rsp, %rcx
-    call SYMBOL(artQuickResolutionTrampoline) // (called, receiver, Thread*, SP)
+    call SYMBOL(artQuickResolutionTrampoline)@PLT // (called, receiver, Thread*, SP)
     movq %rax, %r10               // Remember returned code pointer in R10.
     movq (%rsp), %rdi             // Load called method into RDI.
     RESTORE_SAVE_REFS_AND_ARGS_FRAME
@@ -1787,7 +1787,7 @@ DEFINE_FUNCTION art_quick_generic_jni_trampoline
     //  gs:...   rbp      <= where they are
     movq %gs:THREAD_SELF_OFFSET, %rdi
     movq %rbp, %rsi
-    call SYMBOL(artQuickGenericJniTrampoline)  // (Thread*, sp)
+    call SYMBOL(artQuickGenericJniTrampoline)@PLT  // (Thread*, sp)
 
     // The C call will have registered the complete save-frame on success.
     // The result of the call is:
@@ -1831,7 +1831,7 @@ DEFINE_FUNCTION art_quick_generic_jni_trampoline
     movq %gs:THREAD_SELF_OFFSET, %rdi
     movq %rax, %rsi
     movq %xmm0, %rdx
-    call SYMBOL(artQuickGenericJniEndTrampoline)
+    call SYMBOL(artQuickGenericJniEndTrampoline)@PLT
 
     // Pending exceptions possible.
     // TODO: use cmpq, needs direct encoding because of gas bug
@@ -1894,7 +1894,7 @@ DEFINE_FUNCTION art_quick_to_interpreter_bridge
     SETUP_SAVE_REFS_AND_ARGS_FRAME     // Set up frame and save arguments.
     movq %gs:THREAD_SELF_OFFSET, %rsi  // RSI := Thread::Current()
     movq %rsp, %rdx                    // RDX := sp
-    call SYMBOL(artQuickToInterpreterBridge)  // (method, Thread*, SP)
+    call SYMBOL(artQuickToInterpreterBridge)@PLT  // (method, Thread*, SP)
     RESTORE_SAVE_REFS_AND_ARGS_FRAME   // TODO: no need to restore arguments in this case.
     movq %rax, %xmm0                   // Place return value also into floating point return value.
     RETURN_OR_DELIVER_PENDING_EXCEPTION    // return or deliver exception
@@ -1915,7 +1915,7 @@ DEFINE_FUNCTION art_quick_instrumentation_entry
     movq %gs:THREAD_SELF_OFFSET, %rdx   // Pass thread.
     movq FRAME_SIZE_SAVE_REFS_AND_ARGS-8(%rsp), %rcx   // Pass return PC.
 
-    call SYMBOL(artInstrumentationMethodEntryFromCode) // (Method*, Object*, Thread*, LR)
+    call SYMBOL(artInstrumentationMethodEntryFromCode)@PLT // (Method*, Object*, Thread*, LR)
 
                                   // %rax = result of call.
     movq %r12, %rdi               // Reload method pointer.
@@ -1949,7 +1949,7 @@ DEFINE_FUNCTION art_quick_instrumentation_exit
     movq  %rax, %rdx                          // Pass integer result.
     movq  %xmm0, %rcx                         // Pass floating-point result.
 
-    call SYMBOL(artInstrumentationMethodExitFromCode)   // (Thread*, SP, gpr_res, fpr_res)
+    call SYMBOL(artInstrumentationMethodExitFromCode)@PLT   // (Thread*, SP, gpr_res, fpr_res)
 
     movq  %rax, %rdi          // Store return PC
     movq  %rdx, %rsi          // Store second return PC in hidden arg.
@@ -1976,7 +1976,7 @@ DEFINE_FUNCTION art_quick_deoptimize
     SETUP_SAVE_ALL_CALLEE_SAVES_FRAME
                                        // Stack should be aligned now.
     movq %gs:THREAD_SELF_OFFSET, %rdi  // Pass Thread.
-    call SYMBOL(artDeoptimize)         // artDeoptimize(Thread*)
+    call SYMBOL(artDeoptimize)@PLT         // artDeoptimize(Thread*)
     UNREACHABLE
 END_FUNCTION art_quick_deoptimize
 
@@ -1988,7 +1988,7 @@ DEFINE_FUNCTION art_quick_deoptimize_from_compiled_code
     SETUP_SAVE_EVERYTHING_FRAME
                                                 // Stack should be aligned now.
     movq %gs:THREAD_SELF_OFFSET, %rdi           // Pass Thread.
-    call SYMBOL(artDeoptimizeFromCompiledCode)  // artDeoptimizeFromCompiledCode(Thread*)
+    call SYMBOL(artDeoptimizeFromCompiledCode)@PLT  // artDeoptimizeFromCompiledCode(Thread*)
     UNREACHABLE
 END_FUNCTION art_quick_deoptimize_from_compiled_code
 
@@ -2092,7 +2092,7 @@ DEFINE_FUNCTION art_quick_instance_of
     SETUP_FP_CALLEE_SAVE_FRAME
     subq LITERAL(8), %rsp                      // Alignment padding.
     CFI_ADJUST_CFA_OFFSET(8)
-    call SYMBOL(artInstanceOfFromCode)         // (mirror::Object*, mirror::Class*)
+    call SYMBOL(artInstanceOfFromCode)@PLT         // (mirror::Object*, mirror::Class*)
     addq LITERAL(8), %rsp
     CFI_ADJUST_CFA_OFFSET(-8)
     RESTORE_FP_CALLEE_SAVE_FRAME
@@ -2177,7 +2177,7 @@ MACRO2(READ_BARRIER_MARK_REG, name, reg)
     .ifnc RAW_VAR(reg), rdi
       movq REG_VAR(reg), %rdi       // Pass arg1 - obj from `reg`.
     .endif
-    call SYMBOL(artReadBarrierMark) // artReadBarrierMark(obj)
+    call SYMBOL(artReadBarrierMark)@PLT // artReadBarrierMark(obj)
     .ifnc RAW_VAR(reg), rax
       movq %rax, REG_VAR(reg)       // Return result into `reg`.
     .endif
@@ -2243,7 +2243,7 @@ DEFINE_FUNCTION art_quick_read_barrier_slow
     SETUP_FP_CALLEE_SAVE_FRAME
     subq LITERAL(8), %rsp           // Alignment padding.
     CFI_ADJUST_CFA_OFFSET(8)
-    call SYMBOL(artReadBarrierSlow) // artReadBarrierSlow(ref, obj, offset)
+    call SYMBOL(artReadBarrierSlow)@PLT // artReadBarrierSlow(ref, obj, offset)
     addq LITERAL(8), %rsp
     CFI_ADJUST_CFA_OFFSET(-8)
     RESTORE_FP_CALLEE_SAVE_FRAME
@@ -2254,7 +2254,7 @@ DEFINE_FUNCTION art_quick_read_barrier_for_root_slow
     SETUP_FP_CALLEE_SAVE_FRAME
     subq LITERAL(8), %rsp                  // Alignment padding.
     CFI_ADJUST_CFA_OFFSET(8)
-    call SYMBOL(artReadBarrierForRootSlow) // artReadBarrierForRootSlow(root)
+    call SYMBOL(artReadBarrierForRootSlow)@PLT // artReadBarrierForRootSlow(root)
     addq LITERAL(8), %rsp
     CFI_ADJUST_CFA_OFFSET(-8)
     RESTORE_FP_CALLEE_SAVE_FRAME
@@ -2330,7 +2330,7 @@ DEFINE_FUNCTION art_quick_invoke_polymorphic
     CFI_ADJUST_CFA_OFFSET(16)
     movq LITERAL(0), (%rsp)                        // initialize result
     movq %rsp, %rdi                                // store pointer to JValue result
-    call SYMBOL(artInvokePolymorphic)              // artInvokePolymorphic(result, receiver, Thread*, SP)
+    call SYMBOL(artInvokePolymorphic)@PLT              // artInvokePolymorphic(result, receiver, Thread*, SP)
                                                    // save the code pointer
     subq LITERAL('A'), %rax                        // Convert type descriptor character value to a zero based index.
     cmpb LITERAL('Z' - 'A'), %al                   // Eliminate out of bounds options
