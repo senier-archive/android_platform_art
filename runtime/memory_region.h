@@ -36,7 +36,7 @@ namespace art {
 class MemoryRegion FINAL : public ValueObject {
  public:
   struct ContentEquals {
-    constexpr bool operator()(const MemoryRegion& lhs, const MemoryRegion& rhs) const {
+    bool operator()(const MemoryRegion& lhs, const MemoryRegion& rhs) const {
       return lhs.size() == rhs.size() && memcmp(lhs.begin(), rhs.begin(), lhs.size()) == 0;
     }
   };
