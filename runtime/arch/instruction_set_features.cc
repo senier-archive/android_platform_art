@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include <algorithm>
+
 #include "instruction_set_features.h"
 
 #include "android-base/strings.h"
