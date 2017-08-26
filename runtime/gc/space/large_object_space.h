@@ -17,7 +17,7 @@
 #ifndef ART_RUNTIME_GC_SPACE_LARGE_OBJECT_SPACE_H_
 #define ART_RUNTIME_GC_SPACE_LARGE_OBJECT_SPACE_H_
 
-#include "base/allocator.h"
+#include "base/Xallocator.h"
 #include "dlmalloc_space.h"
 #include "safe_map.h"
 #include "space.h"

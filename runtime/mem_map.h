@@ -27,7 +27,7 @@
 #include <sys/mman.h>  // For the PROT_* and MAP_* constants.
 #include <sys/types.h>
 
-#include "base/allocator.h"
+#include "base/Xallocator.h"
 #include "globals.h"
 
 namespace art {

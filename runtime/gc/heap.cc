@@ -25,7 +25,7 @@
 
 #include "allocation_listener.h"
 #include "art_field-inl.h"
-#include "base/allocator.h"
+#include "base/Xallocator.h"
 #include "base/arena_allocator.h"
 #include "base/dumpable.h"
 #include "base/histogram-inl.h"

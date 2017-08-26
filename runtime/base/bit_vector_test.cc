@@ -16,7 +16,7 @@
 
 #include <memory>
 
-#include "allocator.h"
+#include "Xallocator.h"
 #include "bit_vector-inl.h"
 #include "gtest/gtest.h"
 

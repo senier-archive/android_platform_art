@@ -26,7 +26,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include "base/allocator.h"
+#include "base/Xallocator.h"
 #include "base/bit_utils.h"
 #include "base/mutex.h"
 #include "base/logging.h"
