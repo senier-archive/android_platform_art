@@ -18,6 +18,7 @@
 #define ART_RUNTIME_BASE_SYSTRACE_H_
 
 #define ATRACE_TAG ATRACE_TAG_DALVIK
+#include <atomic>
 #include <cutils/trace.h>
 #include <string>
 #include <utils/Trace.h>
