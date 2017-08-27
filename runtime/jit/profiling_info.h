@@ -18,6 +18,7 @@
 #define ART_RUNTIME_JIT_PROFILING_INFO_H_
 
 #include <vector>
+#include <string.h>
 
 #include "base/macros.h"
 #include "gc_root.h"
