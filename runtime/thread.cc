@@ -1004,7 +1004,11 @@ static void GetThreadStack(pthread_t thread,
   CHECK_PTHREAD_CALL(pthread_attr_destroy, (&attributes), __FUNCTION__);
 #else
   pthread_attr_t attributes;
+#if defined(__GENODE__)
+  CHECK_PTHREAD_CALL(pthread_attr_get_np, (thread, &attributes), __FUNCTION__);
+#else
   CHECK_PTHREAD_CALL(pthread_getattr_np, (thread, &attributes), __FUNCTION__);
+#endif // !__GENODE__
   CHECK_PTHREAD_CALL(pthread_attr_getstack, (&attributes, stack_base, stack_size), __FUNCTION__);
   CHECK_PTHREAD_CALL(pthread_attr_getguardsize, (&attributes, guard_size), __FUNCTION__);
   CHECK_PTHREAD_CALL(pthread_attr_destroy, (&attributes), __FUNCTION__);
