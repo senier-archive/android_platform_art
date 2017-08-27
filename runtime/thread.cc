@@ -21,6 +21,10 @@
 #include <sys/resource.h>
 #include <sys/time.h>
 
+#if defined(__GENODE__)
+#include <pthread_np.h>
+#endif
+
 #include <algorithm>
 #include <bitset>
 #include <cerrno>
