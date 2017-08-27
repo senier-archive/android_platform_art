@@ -1031,6 +1031,14 @@ static void GetThreadStack(pthread_t thread,
   CHECK_PTHREAD_CALL(pthread_attr_init, (&attributes), __FUNCTION__);
   CHECK_PTHREAD_CALL(pthread_attr_getguardsize, (&attributes, guard_size), __FUNCTION__);
   CHECK_PTHREAD_CALL(pthread_attr_destroy, (&attributes), __FUNCTION__);
+#elif defined(__GENODE__)
+  pthread_attr_t attributes;
+  CHECK_PTHREAD_CALL(pthread_attr_get_np, (thread, &attributes), __FUNCTION__);
+  CHECK_PTHREAD_CALL(pthread_attr_getstack, (&attributes, stack_base, stack_size), __FUNCTION__);
+  *guard_size = 0;
+  // Calling pthread_attr_destroy yields an error:
+  // Error: slab block [0000000000000000,0000000000001000) is corrupt - slab address 0x338704
+  // CHECK_PTHREAD_CALL(pthread_attr_destroy, (&attributes), __FUNCTION__);
 #else
   pthread_attr_t attributes;
   CHECK_PTHREAD_CALL(pthread_getattr_np, (thread, &attributes), __FUNCTION__);
