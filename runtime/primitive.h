@@ -17,6 +17,7 @@
 #ifndef ART_RUNTIME_PRIMITIVE_H_
 #define ART_RUNTIME_PRIMITIVE_H_
 
+#include <limits>
 #include <sys/types.h>
 
 #include "base/logging.h"
