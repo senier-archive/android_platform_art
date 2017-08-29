@@ -422,7 +422,7 @@ gensrcs {
     tool_files: ["generate-operator-out.py"],
     srcs: [
         "arch/instruction_set.h",
-        "base/allocator.h",
+        "base/Xallocator.h",
         "base/enums.h",
         "base/mutex.h",
         "debugger.h",
