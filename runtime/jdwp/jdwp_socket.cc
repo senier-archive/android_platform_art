@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include "bsd_compat.h"
+
 #include <arpa/inet.h>
 #include <errno.h>
 #include <netdb.h>
