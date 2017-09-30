@@ -28,7 +28,7 @@
 
 #include "sigchain.h"
 
-#if defined(__APPLE__)
+#if defined(__APPLE__) || defined(__GENODE__)
 #define _NSIG NSIG
 #define sighandler_t sig_t
 #endif
