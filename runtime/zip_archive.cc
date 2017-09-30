@@ -215,7 +215,7 @@ ZipArchive* ZipArchive::Open(const char* filename, std::string* error_msg) {
 
 ZipArchive* ZipArchive::OpenFromFd(int fd, const char* filename, std::string* error_msg) {
   DCHECK(filename != nullptr);
-  DCHECK_GT(fd, 0);
+  DCHECK_GE(fd, 0);
 
   ZipArchiveHandle handle;
   const int32_t error = OpenArchiveFd(fd, filename, &handle);
