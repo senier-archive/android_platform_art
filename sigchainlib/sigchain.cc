@@ -359,7 +359,7 @@ extern "C" void SetSpecialSignalHandlerFn(int signal, SpecialSignalHandlerFn fn)
     act.sa_sigaction = sigchainlib_managed_handler_sigaction;
     sigemptyset(&act.sa_mask);
     act.sa_flags = SA_SIGINFO | SA_ONSTACK;
-#if !defined(__APPLE__) && !defined(__mips__)
+#if !defined(__APPLE__) && !defined(__mips__) && !defined(__GENODE__)
     act.sa_restorer = nullptr;
 #endif
     if (sigaction(signal, &act, &old_act) != -1) {
