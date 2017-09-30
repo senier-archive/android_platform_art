@@ -395,7 +395,8 @@ std::unique_ptr<const DexFile> DexFile::OpenOneDexFileFromZip(const ZipArchive& 
     *error_code = ZipOpenErrorCode::kMakeReadOnlyError;
     return nullptr;
   }
-  CHECK(dex_file->IsReadOnly()) << location;
+  // FIXME: We don't properly protect memory regions right now
+  //CHECK(dex_file->IsReadOnly()) << location;
   if (verify_result != VerifyResult::kVerifySucceeded) {
     *error_code = ZipOpenErrorCode::kVerifyError;
     return nullptr;

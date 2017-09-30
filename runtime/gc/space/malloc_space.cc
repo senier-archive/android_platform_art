@@ -141,7 +141,10 @@ void* MallocSpace::MoreCore(intptr_t increment) {
       // Should never be asked to increase the allocation beyond the capacity of the space. Enforced
       // by mspace_set_footprint_limit.
       CHECK_LE(new_end, Begin() + Capacity());
+// FIXME: Make mprotect() not fail
+#if !defined(__GENODE__)
       CHECK_MEMORY_CALL(mprotect, (original_end, increment, PROT_READ | PROT_WRITE), GetName());
+#endif
     } else {
       // Should never be asked for negative footprint (ie before begin). Zero footprint is ok.
       CHECK_GE(original_end + increment, Begin());

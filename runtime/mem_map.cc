@@ -627,6 +627,11 @@ bool MemMap::Protect(int prot) {
     return true;
   }
 
+// FIXME: mprotect is not implemented
+#ifdef __GENODE__
+  return true;
+#endif
+
   if (mprotect(base_begin_, base_size_, prot) == 0) {
     prot_ = prot;
     return true;
