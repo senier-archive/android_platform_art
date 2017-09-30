@@ -26,7 +26,13 @@
 
 namespace art {
 
+#if defined(__GENODE__)
+// If kObjPtrPoisoning is enabled, we get an exception due to our pointers being below 4GB:
+// obj_ptr-inl.h:46 Check failed: ref <= 0xFFFFFFFFU (ref=1398 28426232832, 0xFFFFFFFFU=4294967295)
+constexpr bool kObjPtrPoisoning = false;
+#else
 constexpr bool kObjPtrPoisoning = kIsDebugBuild;
+#endif
 
 // Value type representing a pointer to a mirror::Object of type MirrorType
 // Pass kPoison as a template boolean for testing in non-debug builds.
