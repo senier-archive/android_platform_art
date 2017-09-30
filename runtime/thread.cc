@@ -693,11 +693,14 @@ bool Thread::Init(ThreadList* thread_list, JavaVMExt* java_vm, JNIEnvExt* jni_en
   tlsPtr_.pthread_self = pthread_self();
   CHECK(is_started_);
 
+// FIXME: Fix stack and TLS setup
+#if !defined(__GENODE__)
   SetUpAlternateSignalStack();
   if (!InitStackHwm()) {
     return false;
   }
   InitCpu();
+#endif
   InitTlsEntryPoints();
   RemoveSuspendTrigger();
   InitCardTable();
