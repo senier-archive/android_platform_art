@@ -160,6 +160,10 @@
 #include <android/set_abort_message.h>
 #endif
 
+#if defined(__GENODE__)
+#include <os/backtrace.h>
+#endif
+
 namespace art {
 
 // If a signal isn't handled properly, enable a handler that attempts to dump the Java stack.
@@ -2296,6 +2300,9 @@ NO_RETURN
 void Runtime::Aborter(const char* abort_message) {
 #ifdef ART_TARGET_ANDROID
   android_set_abort_message(abort_message);
+#endif
+#if defined(__GENODE__)
+  Genode::backtrace();
 #endif
   Runtime::Abort(abort_message);
 }
