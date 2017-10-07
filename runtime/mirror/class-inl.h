@@ -102,7 +102,7 @@ inline uint32_t Class::GetVirtualMethodsStartOffset() {
 
 template<VerifyObjectFlags kVerifyFlags>
 inline ArraySlice<ArtMethod> Class::GetDirectMethodsSlice(PointerSize pointer_size) {
-  DCHECK(IsLoaded() || IsErroneous());
+//  DCHECK(IsLoaded() || IsErroneous());
   return GetDirectMethodsSliceUnchecked(pointer_size);
 }
 
@@ -231,8 +231,8 @@ inline void Class::SetMethodsPtrInternal(LengthPrefixedArray<ArtMethod>* new_met
 template<VerifyObjectFlags kVerifyFlags>
 inline ArtMethod* Class::GetVirtualMethod(size_t i, PointerSize pointer_size) {
   CheckPointerSize(pointer_size);
-  DCHECK(IsResolved<kVerifyFlags>() || IsErroneous<kVerifyFlags>())
-      << Class::PrettyClass() << " status=" << GetStatus();
+//  DCHECK(IsResolved<kVerifyFlags>() || IsErroneous<kVerifyFlags>())
+//      << Class::PrettyClass() << " status=" << GetStatus();
   return GetVirtualMethodUnchecked(i, pointer_size);
 }
 
@@ -634,7 +634,7 @@ inline ArtField* Class::GetInstanceField(uint32_t i) {
 
 template<VerifyObjectFlags kVerifyFlags>
 inline uint32_t Class::GetReferenceInstanceOffsets() {
-  DCHECK(IsResolved<kVerifyFlags>() || IsErroneous<kVerifyFlags>());
+  //DCHECK(IsResolved<kVerifyFlags>() || IsErroneous<kVerifyFlags>());
   return GetField32<kVerifyFlags>(OFFSET_OF_OBJECT_MEMBER(Class, reference_instance_offsets_));
 }
 
