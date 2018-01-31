@@ -1597,6 +1597,7 @@ void Thread::DumpState(std::ostream& os, const Thread* thread, pid_t tid) {
        << " self=" << reinterpret_cast<const void*>(thread) << "\n";
   }
 
+#if !defined(__GENODE__)
   os << "  | sysTid=" << tid
      << " nice=" << getpriority(PRIO_PROCESS, tid)
      << " cgrp=" << scheduler_group_name;
@@ -1608,6 +1609,7 @@ void Thread::DumpState(std::ostream& os, const Thread* thread, pid_t tid) {
     os << " sched=" << policy << "/" << sp.sched_priority
        << " handle=" << reinterpret_cast<void*>(thread->tlsPtr_.pthread_self);
   }
+#endif
   os << "\n";
 
   // Grab the scheduler stats for this thread.
