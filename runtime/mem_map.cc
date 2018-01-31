@@ -641,6 +641,12 @@ bool MemMap::Protect(int prot) {
     return true;
   }
 
+#if defined(__GENODE__)
+    // mprotect() is not supported on Genode
+    prot_ = prot;
+    return true;
+#endif
+
   if (mprotect(base_begin_, base_size_, prot) == 0) {
     prot_ = prot;
     return true;
