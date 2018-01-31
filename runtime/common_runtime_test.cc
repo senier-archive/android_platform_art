@@ -23,7 +23,7 @@
 #include "nativehelper/ScopedLocalRef.h"
 #include <stdlib.h>
 
-#include "../../external/icu/icu4c/source/common/unicode/uvernum.h"
+#include "unicode/uvernum.h"
 #include "android-base/stringprintf.h"
 
 #include "art_field-inl.h"
