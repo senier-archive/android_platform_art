@@ -42,19 +42,10 @@ ThreadPoolWorker::ThreadPoolWorker(ThreadPool* thread_pool, const std::string& n
                                    size_t stack_size)
     : thread_pool_(thread_pool),
       name_(name) {
-  // Add an inaccessible page to catch stack overflow.
-  stack_size += kPageSize;
-  std::string error_msg;
-  stack_.reset(MemMap::MapAnonymous(name.c_str(), nullptr, stack_size, PROT_READ | PROT_WRITE,
-                                    false, false, &error_msg));
-  CHECK(stack_.get() != nullptr) << error_msg;
-  CHECK_ALIGNED(stack_->Begin(), kPageSize);
-  int mprotect_result = mprotect(stack_->Begin(), kPageSize, PROT_NONE);
-  CHECK_EQ(mprotect_result, 0) << "Failed to mprotect() bottom page of thread pool worker stack.";
   const char* reason = "new thread pool worker thread";
   pthread_attr_t attr;
   CHECK_PTHREAD_CALL(pthread_attr_init, (&attr), reason);
-  CHECK_PTHREAD_CALL(pthread_attr_setstack, (&attr, stack_->Begin(), stack_->Size()), reason);
+  CHECK_PTHREAD_CALL(pthread_attr_setstacksize, (&attr, stack_size), reason);
   CHECK_PTHREAD_CALL(pthread_create, (&pthread_, &attr, &Callback, this), reason);
   CHECK_PTHREAD_CALL(pthread_attr_destroy, (&attr), reason);
 }
