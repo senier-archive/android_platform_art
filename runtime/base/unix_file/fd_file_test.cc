@@ -276,7 +276,7 @@ TEST_F(FdFileTest, Compare) {
 
 TEST_F(FdFileTest, PipeFlush) {
   int pipefd[2];
-  ASSERT_EQ(0, pipe2(pipefd, O_CLOEXEC));
+  ASSERT_EQ(0, pipe(pipefd));
 
   FdFile file(pipefd[1], true);
   ASSERT_TRUE(file.WriteFully("foo", 3));
