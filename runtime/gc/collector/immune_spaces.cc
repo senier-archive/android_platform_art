@@ -18,6 +18,7 @@
 
 #include <vector>
 #include <tuple>
+#include <algorithm>
 
 #include "gc/space/space-inl.h"
 #include "mirror/object.h"
