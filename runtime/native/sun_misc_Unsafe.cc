@@ -484,15 +484,15 @@ static void Unsafe_putDouble(JNIEnv* env, jobject, jobject javaObj, jlong offset
 }
 
 static void Unsafe_loadFence(JNIEnv*, jobject) {
-  std::atomic_thread_fence(std::memory_order_acquire);
+  __atomic_thread_fence(std::memory_order_acquire);
 }
 
 static void Unsafe_storeFence(JNIEnv*, jobject) {
-  std::atomic_thread_fence(std::memory_order_release);
+  __atomic_thread_fence(std::memory_order_release);
 }
 
 static void Unsafe_fullFence(JNIEnv*, jobject) {
-  std::atomic_thread_fence(std::memory_order_seq_cst);
+  __atomic_thread_fence(std::memory_order_seq_cst);
 }
 
 static JNINativeMethod gMethods[] = {

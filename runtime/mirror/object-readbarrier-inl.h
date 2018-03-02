@@ -108,14 +108,14 @@ inline uint32_t Object::GetReadBarrierState(uintptr_t* fake_address_dependency) 
   // i386/x86_64 don't need fake address dependency. Use a compiler fence to avoid compiler
   // reordering.
   *fake_address_dependency = 0;
-  std::atomic_signal_fence(std::memory_order_acquire);
+  __atomic_signal_fence(std::memory_order_acquire);
   uint32_t rb_state = lw.ReadBarrierState();
   return rb_state;
 #else
   // MIPS32/MIPS64: use a memory barrier to prevent load-load reordering.
   LockWord lw = GetLockWord(false);
   *fake_address_dependency = 0;
-  std::atomic_thread_fence(std::memory_order_acquire);
+  __atomic_thread_fence(std::memory_order_acquire);
   uint32_t rb_state = lw.ReadBarrierState();
   return rb_state;
 #endif

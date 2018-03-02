@@ -699,7 +699,7 @@ class MarkSweep::MarkStackTask : public Task {
     ALWAYS_INLINE void Mark(mirror::Object* ref) const REQUIRES_SHARED(Locks::mutator_lock_) {
       if (ref != nullptr && mark_sweep_->MarkObjectParallel(ref)) {
         if (kUseFinger) {
-          std::atomic_thread_fence(std::memory_order_seq_cst);
+          __atomic_thread_fence(std::memory_order_seq_cst);
           if (reinterpret_cast<uintptr_t>(ref) >=
               static_cast<uintptr_t>(mark_sweep_->atomic_finger_.LoadRelaxed())) {
             return;
