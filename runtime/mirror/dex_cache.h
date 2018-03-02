@@ -500,7 +500,7 @@ class MANAGED DexCache FINAL : public Object {
     uint64_t first, second;
     __asm__ __volatile__(
         "lock cmpxchg16b (%2)"
-        : "=&a"(first), "=&d"(second)
+        : "=a"(first), "=d"(second)
         : "r"(target), "a"(0), "d"(0), "b"(0), "c"(0)
         : "cc");
     return ConversionPair64(first, second);
