@@ -18,6 +18,7 @@
 
 #include <errno.h>
 #include <sys/time.h>
+#include <algorithm>
 
 #include "android-base/stringprintf.h"
 
