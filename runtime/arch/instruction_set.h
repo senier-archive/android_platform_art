@@ -113,7 +113,6 @@ constexpr PointerSize GetInstructionSetPointerSize(InstructionSet isa) {
     case kNone:
       break;
   }
-  InstructionSetAbort(isa);
 }
 
 constexpr size_t GetInstructionSetInstructionAlignment(InstructionSet isa) {
@@ -136,7 +135,6 @@ constexpr size_t GetInstructionSetInstructionAlignment(InstructionSet isa) {
     case kNone:
       break;
   }
-  InstructionSetAbort(isa);
 }
 
 constexpr bool IsValidInstructionSet(InstructionSet isa) {
@@ -174,7 +172,6 @@ constexpr bool Is64BitInstructionSet(InstructionSet isa) {
     case kNone:
       break;
   }
-  InstructionSetAbort(isa);
 }
 
 constexpr PointerSize InstructionSetPointerSize(InstructionSet isa) {
@@ -201,7 +198,6 @@ constexpr size_t GetBytesPerGprSpillLocation(InstructionSet isa) {
     case kNone:
       break;
   }
-  InstructionSetAbort(isa);
 }
 
 constexpr size_t GetBytesPerFprSpillLocation(InstructionSet isa) {
@@ -224,7 +220,6 @@ constexpr size_t GetBytesPerFprSpillLocation(InstructionSet isa) {
     case kNone:
       break;
   }
-  InstructionSetAbort(isa);
 }
 
 size_t GetStackOverflowReservedBytes(InstructionSet isa);
