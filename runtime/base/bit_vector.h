@@ -18,6 +18,7 @@
 #define ART_RUNTIME_BASE_BIT_VECTOR_H_
 
 #include <stdint.h>
+#include <string.h>
 #include <iterator>
 
 #include "base/bit_utils.h"
