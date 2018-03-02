@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <algorithm>
 #include "heap_bitmap.h"
 
 #include "gc/accounting/space_bitmap-inl.h"
