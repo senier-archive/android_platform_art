@@ -19,6 +19,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <string.h>
 
 #include "base/bit_utils.h"
 #include "base/dchecked_vector.h"
