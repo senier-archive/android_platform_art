@@ -1637,7 +1637,7 @@ END_FUNCTION art_quick_proxy_invoke_handler
      * Note that this stub writes to r10 and rdi.
      */
 DEFINE_FUNCTION art_quick_imt_conflict_trampoline
-#if defined(__APPLE__)
+#if defined(__APPLE__) || defined(__GENODE__)
     int3
     int3
 #else
