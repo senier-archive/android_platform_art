@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <memory>
 #include <string>
+#include <algorithm>
 
 #include "android-base/stringprintf.h"
 
