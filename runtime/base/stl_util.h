@@ -18,6 +18,7 @@
 #define ART_RUNTIME_BASE_STL_UTIL_H_
 
 #include <algorithm>
+#include <vector>
 #include <set>
 #include <sstream>
 #include <string.h>
