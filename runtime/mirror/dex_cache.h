@@ -466,6 +466,7 @@ class MANAGED DexCache FINAL : public Object {
   struct PACKED(2 * sizeof(IntType)) ConversionPair {
     ConversionPair(IntType f, IntType s) : first(f), second(s) { }
     ConversionPair(const ConversionPair&) = default;
+    ConversionPair() = default;
     ConversionPair& operator=(const ConversionPair&) = default;
     IntType first;
     IntType second;
