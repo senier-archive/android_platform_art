@@ -29,6 +29,7 @@ class StrideIterator : public std::iterator<std::random_access_iterator_tag, T> 
   using difference_type =
       typename std::iterator<std::random_access_iterator_tag, T>::difference_type;
 
+  StrideIterator() = default;
   StrideIterator(const StrideIterator&) = default;
   StrideIterator(StrideIterator&&) = default;
   StrideIterator& operator=(const StrideIterator&) = default;
