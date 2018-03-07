@@ -20,6 +20,7 @@
 #include "bump_pointer_space.h"
 
 #include "base/bit_utils.h"
+#include <string.h>
 
 namespace art {
 namespace gc {
@@ -75,6 +76,7 @@ inline mirror::Object* BumpPointerSpace::AllocNonvirtualWithoutAccounting(size_t
       return nullptr;
     }
   } while (!end_.CompareExchangeWeakSequentiallyConsistent(old_end, new_end));
+  memset(static_cast<void *>(old_end), 0, num_bytes);
   return reinterpret_cast<mirror::Object*>(old_end);
 }
 
