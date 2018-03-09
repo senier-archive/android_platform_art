@@ -26,7 +26,7 @@
 
 namespace art {
 
-constexpr bool kObjPtrPoisoning = kIsDebugBuild;
+constexpr bool kObjPtrPoisoning = false;
 
 // Value type representing a pointer to a mirror::Object of type MirrorType
 // Pass kPoison as a template boolean for testing in non-debug builds.
