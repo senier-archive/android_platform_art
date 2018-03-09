@@ -59,9 +59,11 @@ DlMallocSpace* DlMallocSpace::CreateFromMemMap(MemMap* mem_map, const std::strin
 
   // Protect memory beyond the starting size. morecore will add r/w permissions when necessory
   uint8_t* end = mem_map->Begin() + starting_size;
+#ifndef __GENODE__
   if (capacity - starting_size > 0) {
     CHECK_MEMORY_CALL(mprotect, (end, capacity - starting_size, PROT_NONE), name);
   }
+#endif
 
   // Everything is set so record in immutable structure and leave
   uint8_t* begin = mem_map->Begin();
