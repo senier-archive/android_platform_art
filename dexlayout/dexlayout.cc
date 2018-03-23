@@ -1924,6 +1924,7 @@ void DexLayout::OutputDexFile(const DexFile* dex_file) {
   }
   DexWriter::Output(header_, mem_map_.get());
   if (new_file != nullptr) {
+    write(new_file->Fd(), mem_map_.get()->Begin(), header_->FileSize());
     UNUSED(new_file->FlushCloseOrErase());
   }
   // Verify the output dex file's structure for debug builds.
