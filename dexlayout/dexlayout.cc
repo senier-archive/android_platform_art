@@ -46,6 +46,9 @@
 #include "os.h"
 #include "utils.h"
 
+// FIXME: Remove once genodelabs/genode#2714 is resolved
+#include <librwall.h>
+
 namespace art {
 
 using android::base::StringPrintf;
@@ -1924,7 +1927,8 @@ void DexLayout::OutputDexFile(const DexFile* dex_file) {
   }
   DexWriter::Output(header_, mem_map_.get());
   if (new_file != nullptr) {
-    write(new_file->Fd(), mem_map_.get()->Begin(), header_->FileSize());
+    // FIXME: Remove once genodelabs/genode#2714 is resolved
+    rwall_write(new_file->Fd(), mem_map_.get()->Begin(), header_->FileSize());
     UNUSED(new_file->FlushCloseOrErase());
   }
   // Verify the output dex file's structure for debug builds.
