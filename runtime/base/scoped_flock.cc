@@ -47,6 +47,7 @@ using android::base::StringPrintf;
       return nullptr;
     }
 
+#ifndef __GENODE__
     int operation = block ? LOCK_EX : (LOCK_EX | LOCK_NB);
     int flock_result = TEMP_FAILURE_RETRY(flock(file->Fd(), operation));
     if (flock_result == EWOULDBLOCK) {
@@ -57,6 +58,7 @@ using android::base::StringPrintf;
       *error_msg = StringPrintf("Failed to lock file '%s': %s", filename, strerror(errno));
       return nullptr;
     }
+#endif
     struct stat fstat_stat;
     int fstat_result = TEMP_FAILURE_RETRY(fstat(file->Fd(), &fstat_stat));
     if (fstat_result != 0) {
