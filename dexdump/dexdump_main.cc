@@ -146,6 +146,8 @@ int dexdumpDriver(int argc, char** argv) {
   while (optind < argc) {
     result |= processFile(argv[optind++]);
   }  // while
+
+  fclose(gOutFile);
   return result != 0;
 }
 
