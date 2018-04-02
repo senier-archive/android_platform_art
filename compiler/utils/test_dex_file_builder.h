@@ -21,6 +21,7 @@
 #include <set>
 #include <map>
 #include <vector>
+#include <algorithm>
 #include <zlib.h>
 
 #include "base/bit_utils.h"
