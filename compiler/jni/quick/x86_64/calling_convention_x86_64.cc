@@ -24,19 +24,19 @@
 namespace art {
 namespace x86_64 {
 
-constexpr size_t kFramePointerSize = static_cast<size_t>(PointerSize::k64);
+size_t kFramePointerSize = static_cast<size_t>(PointerSize::k64);
 static_assert(kX86_64PointerSize == PointerSize::k64, "Unexpected x86_64 pointer size");
 static_assert(kStackAlignment >= 16u, "System V AMD64 ABI requires at least 16 byte stack alignment");
 
 // XMM0..XMM7 can be used to pass the first 8 floating args. The rest must go on the stack.
 // -- Managed and JNI calling conventions.
-constexpr size_t kMaxFloatOrDoubleRegisterArguments = 8u;
+size_t kMaxFloatOrDoubleRegisterArguments = 8u;
 // Up to how many integer-like (pointers, objects, longs, int, short, bool, etc) args can be
 // enregistered. The rest of the args must go on the stack.
 // -- JNI calling convention only (Managed excludes RDI, so it's actually 5).
-constexpr size_t kMaxIntLikeRegisterArguments = 6u;
+size_t kMaxIntLikeRegisterArguments = 6u;
 
-static constexpr ManagedRegister kCalleeSaveRegisters[] = {
+static ManagedRegister kCalleeSaveRegisters[] = {
     // Core registers.
     X86_64ManagedRegister::FromCpuRegister(RBX),
     X86_64ManagedRegister::FromCpuRegister(RBP),
@@ -51,7 +51,7 @@ static constexpr ManagedRegister kCalleeSaveRegisters[] = {
     X86_64ManagedRegister::FromXmmRegister(XMM15),
 };
 
-static constexpr uint32_t CalculateCoreCalleeSpillMask() {
+static uint32_t CalculateCoreCalleeSpillMask() {
   // The spilled PC gets a special marker.
   uint32_t result = 1 << kNumberOfCpuRegisters;
   for (auto&& r : kCalleeSaveRegisters) {
@@ -62,7 +62,7 @@ static constexpr uint32_t CalculateCoreCalleeSpillMask() {
   return result;
 }
 
-static constexpr uint32_t CalculateFpCalleeSpillMask() {
+static uint32_t CalculateFpCalleeSpillMask() {
   uint32_t result = 0;
   for (auto&& r : kCalleeSaveRegisters) {
     if (r.AsX86_64().IsXmmRegister()) {
@@ -72,8 +72,8 @@ static constexpr uint32_t CalculateFpCalleeSpillMask() {
   return result;
 }
 
-static constexpr uint32_t kCoreCalleeSpillMask = CalculateCoreCalleeSpillMask();
-static constexpr uint32_t kFpCalleeSpillMask = CalculateFpCalleeSpillMask();
+static uint32_t kCoreCalleeSpillMask = CalculateCoreCalleeSpillMask();
+static uint32_t kFpCalleeSpillMask = CalculateFpCalleeSpillMask();
 
 // Calling convention
 
@@ -245,7 +245,7 @@ ManagedRegister X86_64JniCallingConvention::CurrentParamRegister() {
     case 3: res = X86_64ManagedRegister::FromCpuRegister(RCX); break;
     case 4: res = X86_64ManagedRegister::FromCpuRegister(R8); break;
     case 5: res = X86_64ManagedRegister::FromCpuRegister(R9); break;
-    static_assert(5u == kMaxIntLikeRegisterArguments - 1, "Missing case statement(s)");
+    //static_assert(5u == kMaxIntLikeRegisterArguments - 1, "Missing case statement(s)");
     }
   } else if (itr_float_and_doubles_ < kMaxFloatOrDoubleRegisterArguments) {
     // First eight float parameters are passed via XMM0..XMM7

@@ -26,7 +26,7 @@ namespace x86 {
 static_assert(kX86PointerSize == PointerSize::k32, "Unexpected x86 pointer size");
 static_assert(kStackAlignment >= 16u, "IA-32 cdecl requires at least 16 byte stack alignment");
 
-static constexpr ManagedRegister kCalleeSaveRegisters[] = {
+static ManagedRegister kCalleeSaveRegisters[] = {
     // Core registers.
     X86ManagedRegister::FromCpuRegister(EBP),
     X86ManagedRegister::FromCpuRegister(ESI),
@@ -34,7 +34,7 @@ static constexpr ManagedRegister kCalleeSaveRegisters[] = {
     // No hard float callee saves.
 };
 
-static constexpr uint32_t CalculateCoreCalleeSpillMask() {
+static uint32_t CalculateCoreCalleeSpillMask() {
   // The spilled PC gets a special marker.
   uint32_t result = 1 << kNumberOfCpuRegisters;
   for (auto&& r : kCalleeSaveRegisters) {
@@ -45,8 +45,8 @@ static constexpr uint32_t CalculateCoreCalleeSpillMask() {
   return result;
 }
 
-static constexpr uint32_t kCoreCalleeSpillMask = CalculateCoreCalleeSpillMask();
-static constexpr uint32_t kFpCalleeSpillMask = 0u;
+static uint32_t kCoreCalleeSpillMask = CalculateCoreCalleeSpillMask();
+static uint32_t kFpCalleeSpillMask = 0u;
 
 // Calling convention
 

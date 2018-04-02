@@ -29,10 +29,10 @@ namespace mips {
 
 // Up to how many float-like (float, double) args can be enregistered in floating-point registers.
 // The rest of the args must go in integer registers or on the stack.
-constexpr size_t kMaxFloatOrDoubleRegisterArguments = 2u;
+size_t kMaxFloatOrDoubleRegisterArguments = 2u;
 // Up to how many integer-like (pointers, objects, longs, int, short, bool, etc) args can be
 // enregistered. The rest of the args must go on the stack.
-constexpr size_t kMaxIntLikeRegisterArguments = 4u;
+size_t kMaxIntLikeRegisterArguments = 4u;
 
 static const Register kJniCoreArgumentRegisters[] = { A0, A1, A2, A3 };
 static const FRegister kJniFArgumentRegisters[] = { F12, F14 };
@@ -46,7 +46,7 @@ static const Register kManagedCoreArgumentRegisters[] = { A0, A1, A2, A3, T0, T1
 static const FRegister kManagedFArgumentRegisters[] = { F8, F10, F12, F14, F16, F18 };
 static const DRegister kManagedDArgumentRegisters[] = { D4, D5, D6, D7, D8, D9 };
 
-static constexpr ManagedRegister kCalleeSaveRegisters[] = {
+static ManagedRegister kCalleeSaveRegisters[] = {
     // Core registers.
     MipsManagedRegister::FromCoreRegister(S2),
     MipsManagedRegister::FromCoreRegister(S3),
@@ -58,7 +58,7 @@ static constexpr ManagedRegister kCalleeSaveRegisters[] = {
     // No hard float callee saves.
 };
 
-static constexpr uint32_t CalculateCoreCalleeSpillMask() {
+static uint32_t CalculateCoreCalleeSpillMask() {
   // RA is a special callee save which is not reported by CalleeSaveRegisters().
   uint32_t result = 1 << RA;
   for (auto&& r : kCalleeSaveRegisters) {
@@ -69,8 +69,8 @@ static constexpr uint32_t CalculateCoreCalleeSpillMask() {
   return result;
 }
 
-static constexpr uint32_t kCoreCalleeSpillMask = CalculateCoreCalleeSpillMask();
-static constexpr uint32_t kFpCalleeSpillMask = 0u;
+static uint32_t kCoreCalleeSpillMask = CalculateCoreCalleeSpillMask();
+static uint32_t kFpCalleeSpillMask = 0u;
 
 // Calling convention
 ManagedRegister MipsManagedRuntimeCallingConvention::InterproceduralScratchRegister() {

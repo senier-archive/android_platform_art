@@ -62,7 +62,7 @@ static_assert(arraysize(kHFDArgumentRegisters) * 2 == arraysize(kHFSArgumentRegi
 // Shared managed+JNI calling convention constants.
 //
 
-static constexpr ManagedRegister kCalleeSaveRegisters[] = {
+static ManagedRegister kCalleeSaveRegisters[] = {
     // Core registers.
     ArmManagedRegister::FromCoreRegister(R5),
     ArmManagedRegister::FromCoreRegister(R6),
@@ -89,7 +89,7 @@ static constexpr ManagedRegister kCalleeSaveRegisters[] = {
     ArmManagedRegister::FromSRegister(S31)
 };
 
-static constexpr uint32_t CalculateCoreCalleeSpillMask() {
+static uint32_t CalculateCoreCalleeSpillMask() {
   // LR is a special callee save which is not reported by CalleeSaveRegisters().
   uint32_t result = 1 << LR;
   for (auto&& r : kCalleeSaveRegisters) {
@@ -100,7 +100,7 @@ static constexpr uint32_t CalculateCoreCalleeSpillMask() {
   return result;
 }
 
-static constexpr uint32_t CalculateFpCalleeSpillMask() {
+static uint32_t CalculateFpCalleeSpillMask() {
   uint32_t result = 0;
   for (auto&& r : kCalleeSaveRegisters) {
     if (r.AsArm().IsSRegister()) {
@@ -110,8 +110,8 @@ static constexpr uint32_t CalculateFpCalleeSpillMask() {
   return result;
 }
 
-static constexpr uint32_t kCoreCalleeSpillMask = CalculateCoreCalleeSpillMask();
-static constexpr uint32_t kFpCalleeSpillMask = CalculateFpCalleeSpillMask();
+static uint32_t kCoreCalleeSpillMask = CalculateCoreCalleeSpillMask();
+static uint32_t kFpCalleeSpillMask = CalculateFpCalleeSpillMask();
 
 // Calling convention
 

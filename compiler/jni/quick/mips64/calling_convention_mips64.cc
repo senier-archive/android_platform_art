@@ -24,7 +24,7 @@ namespace art {
 namespace mips64 {
 
 // Up to kow many args can be enregistered. The rest of the args must go on the stack.
-constexpr size_t kMaxRegisterArguments = 8u;
+size_t kMaxRegisterArguments = 8u;
 
 static const GpuRegister kGpuArgumentRegisters[] = {
   A0, A1, A2, A3, A4, A5, A6, A7
@@ -34,7 +34,7 @@ static const FpuRegister kFpuArgumentRegisters[] = {
   F12, F13, F14, F15, F16, F17, F18, F19
 };
 
-static constexpr ManagedRegister kCalleeSaveRegisters[] = {
+static ManagedRegister kCalleeSaveRegisters[] = {
     // Core registers.
     Mips64ManagedRegister::FromGpuRegister(S2),
     Mips64ManagedRegister::FromGpuRegister(S3),
@@ -47,7 +47,7 @@ static constexpr ManagedRegister kCalleeSaveRegisters[] = {
     // No hard float callee saves.
 };
 
-static constexpr uint32_t CalculateCoreCalleeSpillMask() {
+static uint32_t CalculateCoreCalleeSpillMask() {
   // RA is a special callee save which is not reported by CalleeSaveRegisters().
   uint32_t result = 1 << RA;
   for (auto&& r : kCalleeSaveRegisters) {
@@ -58,8 +58,8 @@ static constexpr uint32_t CalculateCoreCalleeSpillMask() {
   return result;
 }
 
-static constexpr uint32_t kCoreCalleeSpillMask = CalculateCoreCalleeSpillMask();
-static constexpr uint32_t kFpCalleeSpillMask = 0u;
+static uint32_t kCoreCalleeSpillMask = CalculateCoreCalleeSpillMask();
+static uint32_t kFpCalleeSpillMask = 0u;
 
 // Calling convention
 ManagedRegister Mips64ManagedRuntimeCallingConvention::InterproceduralScratchRegister() {

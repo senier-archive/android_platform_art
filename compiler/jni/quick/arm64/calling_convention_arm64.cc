@@ -26,10 +26,10 @@ static_assert(kArm64PointerSize == PointerSize::k64, "Unexpected ARM64 pointer s
 
 // Up to how many float-like (float, double) args can be enregistered.
 // The rest of the args must go on the stack.
-constexpr size_t kMaxFloatOrDoubleRegisterArguments = 8u;
+size_t kMaxFloatOrDoubleRegisterArguments = 8u;
 // Up to how many integer-like (pointers, objects, longs, int, short, bool, etc) args can be
 // enregistered. The rest of the args must go on the stack.
-constexpr size_t kMaxIntLikeRegisterArguments = 8u;
+size_t kMaxIntLikeRegisterArguments = 8u;
 
 static const XRegister kXArgumentRegisters[] = {
   X0, X1, X2, X3, X4, X5, X6, X7
@@ -47,7 +47,7 @@ static const SRegister kSArgumentRegisters[] = {
   S0, S1, S2, S3, S4, S5, S6, S7
 };
 
-static constexpr ManagedRegister kCalleeSaveRegisters[] = {
+static ManagedRegister kCalleeSaveRegisters[] = {
     // Core registers.
     // Note: The native jni function may call to some VM runtime functions which may suspend
     // or trigger GC. And the jni method frame will become top quick frame in those cases.
@@ -83,7 +83,7 @@ static constexpr ManagedRegister kCalleeSaveRegisters[] = {
     Arm64ManagedRegister::FromDRegister(D15),
 };
 
-static constexpr uint32_t CalculateCoreCalleeSpillMask() {
+static uint32_t CalculateCoreCalleeSpillMask() {
   uint32_t result = 0u;
   for (auto&& r : kCalleeSaveRegisters) {
     if (r.AsArm64().IsXRegister()) {
@@ -93,7 +93,7 @@ static constexpr uint32_t CalculateCoreCalleeSpillMask() {
   return result;
 }
 
-static constexpr uint32_t CalculateFpCalleeSpillMask() {
+static uint32_t CalculateFpCalleeSpillMask() {
   uint32_t result = 0;
   for (auto&& r : kCalleeSaveRegisters) {
     if (r.AsArm64().IsDRegister()) {
@@ -103,8 +103,8 @@ static constexpr uint32_t CalculateFpCalleeSpillMask() {
   return result;
 }
 
-static constexpr uint32_t kCoreCalleeSpillMask = CalculateCoreCalleeSpillMask();
-static constexpr uint32_t kFpCalleeSpillMask = CalculateFpCalleeSpillMask();
+static uint32_t kCoreCalleeSpillMask = CalculateCoreCalleeSpillMask();
+static uint32_t kFpCalleeSpillMask = CalculateFpCalleeSpillMask();
 
 // Calling convention
 ManagedRegister Arm64ManagedRuntimeCallingConvention::InterproceduralScratchRegister() {
