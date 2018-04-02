@@ -210,7 +210,7 @@ class Dex2oatImageTest : public CommonRuntimeTest {
       memset(buffer, 0, 128);
       ssize_t bytes_read = 0;
 
-      while (TEMP_FAILURE_RETRY(bytes_read = read(link[0], buffer, 128)) > 0) {
+      while ((bytes_read = read(link[0], buffer, 128)) > 0) {
         *error_msg += std::string(buffer, bytes_read);
       }
       close(link[0]);
