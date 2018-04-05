@@ -59,6 +59,7 @@ void DexCache::InitializeDexCache(Thread* self,
     raw_arrays = (layout.Alignment() == 16u)
         ? reinterpret_cast<uint8_t*>(linear_alloc->AllocAlign16(self, layout.Size()))
         : reinterpret_cast<uint8_t*>(linear_alloc->Alloc(self, layout.Size()));
+    bzero(raw_arrays, layout.Size());
   }
 
   StringDexCacheType* strings = (dex_file->NumStringIds() == 0u) ? nullptr :
