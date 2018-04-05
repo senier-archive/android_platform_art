@@ -47,7 +47,8 @@ ThreadPoolWorker::ThreadPoolWorker(ThreadPool* thread_pool, const std::string& n
   CHECK_PTHREAD_CALL(pthread_attr_init, (&attr), reason);
   CHECK_PTHREAD_CALL(pthread_attr_setstacksize, (&attr, stack_size), reason);
   CHECK_PTHREAD_CALL(pthread_create, (&pthread_, &attr, &Callback, this), reason);
-  CHECK_PTHREAD_CALL(pthread_attr_destroy, (&attr), reason);
+  // FIXME: Results in crash, cf. Componolit/componolit#107
+  // CHECK_PTHREAD_CALL(pthread_attr_destroy, (&attr), reason);
 }
 
 ThreadPoolWorker::~ThreadPoolWorker() {
