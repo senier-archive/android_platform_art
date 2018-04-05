@@ -48,6 +48,10 @@
 #include <linux/unistd.h>
 #endif
 
+#if defined(__GENODE__)
+#include <pthread/gettid.h>
+#endif
+
 namespace art {
 
 using android::base::StringAppendF;
@@ -58,10 +62,8 @@ pid_t GetTid() {
   uint64_t owner;
   CHECK_PTHREAD_CALL(pthread_threadid_np, (nullptr, &owner), __FUNCTION__);  // Requires Mac OS 10.6
   return owner;
-#elif defined(__BIONIC__)
+#elif defined(__BIONIC__) || defined(__GENODE__)
   return gettid();
-#elif defined(__GENODE__)
-  return 42;
 #else
   return syscall(__NR_gettid);
 #endif
