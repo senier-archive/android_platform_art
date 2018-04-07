@@ -380,6 +380,9 @@ MemMap* MemMap::MapAnonymous(const char* name,
   if (!CheckMapRequest(expected_ptr, actual, page_aligned_byte_count, error_msg)) {
     return nullptr;
   }
+#ifdef __GENODE__
+  bzero(actual, page_aligned_byte_count);
+#endif
   return new MemMap(name, reinterpret_cast<uint8_t*>(actual), byte_count, actual,
                     page_aligned_byte_count, prot, reuse);
 }
