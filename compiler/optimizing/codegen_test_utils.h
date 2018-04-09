@@ -209,8 +209,14 @@ static void Run(const InternalCodeAllocator& allocator,
   InstructionSet target_isa = codegen.GetInstructionSet();
 
   typedef Expected (*fptr)();
+#ifdef __GENODE__
+    void *tmp = mmap(nullptr, allocator.GetSize(), PROT_READ|PROT_WRITE|PROT_EXEC, 0, -1, 0);
+    memcpy(tmp, allocator.GetMemory(), allocator.GetSize());
+    fptr f = reinterpret_cast<fptr>(tmp);
+#else
   CommonCompilerTest::MakeExecutable(allocator.GetMemory(), allocator.GetSize());
   fptr f = reinterpret_cast<fptr>(allocator.GetMemory());
+#endif
   if (target_isa == kThumb2) {
     // For thumb we need the bottom bit set.
     f = reinterpret_cast<fptr>(reinterpret_cast<uintptr_t>(f) + 1);

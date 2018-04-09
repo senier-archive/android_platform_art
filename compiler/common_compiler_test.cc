@@ -89,9 +89,14 @@ void CommonCompilerTest::MakeExecutable(ArtMethod* method) {
     // Make sure no resizing takes place.
     CHECK_GE(chunk->capacity(), chunk->size() + padding);
     chunk->insert(chunk->begin(), padding, 0);
+#ifdef __GENODE__
+    void* code_ptr = mmap(nullptr, code.size(), PROT_READ|PROT_WRITE|PROT_EXEC, 0, -1, 0);
+    memcpy(code_ptr, reinterpret_cast<const void*>(unaligned_code_ptr), code.size());
+#else
     const void* code_ptr = reinterpret_cast<const uint8_t*>(unaligned_code_ptr) + padding;
     CHECK_EQ(code_ptr, static_cast<const void*>(chunk->data() + (chunk->size() - code_size)));
     MakeExecutable(code_ptr, code.size());
+#endif
     const void* method_code = CompiledMethod::CodePointer(code_ptr,
                                                           compiled_method->GetInstructionSet());
     LOG(INFO) << "MakeExecutable " << method->PrettyMethod() << " code=" << method_code;
@@ -104,6 +109,10 @@ void CommonCompilerTest::MakeExecutable(ArtMethod* method) {
 }
 
 void CommonCompilerTest::MakeExecutable(const void* code_start, size_t code_length) {
+#ifdef __GENODE__
+  printf ("ERROR: MakeExecutable called for %p, size=%ld\n", code_start, code_length);
+  return;
+#else
   CHECK(code_start != nullptr);
   CHECK_NE(code_length, 0U);
   uintptr_t data = reinterpret_cast<uintptr_t>(code_start);
@@ -114,6 +123,7 @@ void CommonCompilerTest::MakeExecutable(const void* code_start, size_t code_leng
   CHECK_EQ(result, 0);
 
   FlushInstructionCache(reinterpret_cast<char*>(base), reinterpret_cast<char*>(base + len));
+#endif
 }
 
 void CommonCompilerTest::MakeExecutable(ObjPtr<mirror::ClassLoader> class_loader,
