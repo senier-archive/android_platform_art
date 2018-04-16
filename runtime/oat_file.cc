@@ -63,7 +63,7 @@ namespace art {
 using android::base::StringPrintf;
 
 // Whether OatFile::Open will try dlopen. Fallback is our own ELF loader.
-static constexpr bool kUseDlopen = true;
+static constexpr bool kUseDlopen = false;
 
 // Whether OatFile::Open will try dlopen on the host. On the host we're not linking against
 // bionic, so cannot take advantage of the support for changed semantics (loading the same soname
