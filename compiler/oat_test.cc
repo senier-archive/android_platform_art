@@ -540,6 +540,7 @@ TEST_F(OatTest, EmptyTextSection) {
   compiler_driver_->SetDexFilesForOatFile(dex_files);
   compiler_driver_->CompileAll(class_loader, dex_files, &timings);
 
+  setenv("ANDROID_DATA", "/tmp", 1);
   ScratchFile tmp_oat, tmp_vdex(tmp_oat, ".vdex");
   SafeMap<std::string, std::string> key_value_store;
   key_value_store.Put(OatHeader::kImageLocationKey, "test.art");
