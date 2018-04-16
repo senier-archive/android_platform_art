@@ -262,7 +262,7 @@ class Monitor {
   uint32_t GetOwnerThreadId() REQUIRES(!monitor_lock_);
 
   // Support for systrace output of monitor operations.
-  ALWAYS_INLINE static void AtraceMonitorLock(Thread* self,
+  static void AtraceMonitorLock(Thread* self,
                                               mirror::Object* obj,
                                               bool is_wait)
       REQUIRES_SHARED(Locks::mutator_lock_);
@@ -270,7 +270,7 @@ class Monitor {
                                     mirror::Object* obj,
                                     bool is_wait)
       REQUIRES_SHARED(Locks::mutator_lock_);
-  ALWAYS_INLINE static void AtraceMonitorUnlock();
+  static void AtraceMonitorUnlock();
 
   static uint32_t lock_profiling_threshold_;
   static uint32_t stack_dump_lock_profiling_threshold_;

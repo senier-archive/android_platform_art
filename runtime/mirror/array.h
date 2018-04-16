@@ -130,14 +130,14 @@ class MANAGED PrimitiveArray : public Array {
     return reinterpret_cast<T*>(GetRawData(sizeof(T), 0));
   }
 
-  T Get(int32_t i) ALWAYS_INLINE REQUIRES_SHARED(Locks::mutator_lock_);
+  T Get(int32_t i) REQUIRES_SHARED(Locks::mutator_lock_);
 
   T GetWithoutChecks(int32_t i) ALWAYS_INLINE REQUIRES_SHARED(Locks::mutator_lock_) {
     DCHECK(CheckIsValidIndex(i)) << "i=" << i << " length=" << GetLength();
     return GetData()[i];
   }
 
-  void Set(int32_t i, T value) ALWAYS_INLINE REQUIRES_SHARED(Locks::mutator_lock_);
+  inline void Set(int32_t i, T value) REQUIRES_SHARED(Locks::mutator_lock_);
 
   // TODO fix thread safety analysis broken by the use of template. This should be
   // REQUIRES_SHARED(Locks::mutator_lock_).
