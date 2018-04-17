@@ -86,7 +86,12 @@ SignalCatcher::SignalCatcher(const std::string& stack_trace_file,
   SetHaltFlag(false);
 
   // Create a raw pthread; its start routine will attach to the runtime.
-  CHECK_PTHREAD_CALL(pthread_create, (&pthread_, nullptr, &Run, this), "signal catcher thread");
+  pthread_attr_t attr;
+  pthread_attr_init(&attr);
+  CHECK_PTHREAD_CALL(pthread_create, (&pthread_, &attr, &Run, this), "signal catcher thread");
+
+  // FIXME: This results in a segfault.
+  //pthread_attr_destroy(&attr);
 
   Thread* self = Thread::Current();
   MutexLock mu(self, lock_);
