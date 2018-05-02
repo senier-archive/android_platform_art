@@ -28,6 +28,9 @@
 // END android-changed
 #include <sys/elf.h>
 
+// This is defined by Genode sys/elf_common.h as well as runtime/elf_utils.h
+#undef STV_DEFAULT
+
 typedef uint32_t Elf32_Addr; // Program address
 typedef uint32_t Elf32_Off;  // File offset
 typedef uint16_t Elf32_Half;
