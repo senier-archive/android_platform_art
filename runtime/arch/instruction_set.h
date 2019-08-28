@@ -92,7 +92,7 @@ InstructionSet GetInstructionSetFromString(const char* instruction_set);
 InstructionSet GetInstructionSetFromELF(uint16_t e_machine, uint32_t e_flags);
 
 // Fatal logging out of line to keep the header clean of logging.h.
-NO_RETURN void InstructionSetAbort(InstructionSet isa);
+NO_RETURN constexpr void InstructionSetAbort(InstructionSet isa) { abort(); };
 
 constexpr PointerSize GetInstructionSetPointerSize(InstructionSet isa) {
   switch (isa) {

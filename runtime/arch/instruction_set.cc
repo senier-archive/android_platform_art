@@ -24,6 +24,7 @@
 
 namespace art {
 
+#ifndef __GENODE__
 void InstructionSetAbort(InstructionSet isa) {
   switch (isa) {
     case InstructionSet::kArm:
@@ -40,6 +41,7 @@ void InstructionSetAbort(InstructionSet isa) {
   LOG(FATAL) << "Unknown ISA " << isa;
   UNREACHABLE();
 }
+#endif // __GENODE__
 
 const char* GetInstructionSetString(InstructionSet isa) {
   switch (isa) {
