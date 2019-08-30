@@ -33,7 +33,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wredundant-decls"
 #pragma GCC diagnostic ignored "-Wnull-pointer-arithmetic"
-#include "../../external/dlmalloc/malloc.h"
+#include <dlmalloc/malloc.h>
 #pragma GCC diagnostic pop
 
 // Callback for dlmalloc_inspect_all or mspace_inspect_all that will madvise(2) unused
