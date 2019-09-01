@@ -1617,7 +1617,7 @@ class Thread {
 
     // Sampling profiler and AOT verification cannot happen on the same run, so we share
     // the same entry for the stack trace and the verifier deps.
-    union DepsOrStackTraceSample {
+    union PACKED(sizeof(void*)) DepsOrStackTraceSample {
       DepsOrStackTraceSample() {
         verifier_deps = nullptr;
         stack_trace_sample = nullptr;

@@ -183,7 +183,7 @@ class GcRootSource {
 };
 
 template<class MirrorType>
-class GcRoot {
+class PACKED(4) GcRoot {
  public:
   template<ReadBarrierOption kReadBarrierOption = kWithReadBarrier>
   ALWAYS_INLINE MirrorType* Read(GcRootSource* gc_root_source = nullptr) const

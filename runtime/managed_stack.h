@@ -126,7 +126,7 @@ class PACKED(4) ManagedStack {
  private:
   // Encodes the top quick frame (which must be at least 4-byte aligned)
   // and a flag that marks the GenericJNI trampoline.
-  class TaggedTopQuickFrame {
+  class PACKED(4) TaggedTopQuickFrame {
    public:
     static TaggedTopQuickFrame CreateNotTagged(ArtMethod** sp) {
       DCHECK_ALIGNED(sp, 4u);
