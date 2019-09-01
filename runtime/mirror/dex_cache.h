@@ -487,13 +487,13 @@ class MANAGED DexCache FINAL : public Object {
 #elif defined(__x86_64__)
   ALWAYS_INLINE static ConversionPair64 AtomicLoadRelaxed16B(
       std::atomic<ConversionPair64>* target) {
-    uint64_t first, second;
+    ConversionPair64 ret(0, 0);
     __asm__ __volatile__(
-        "lock cmpxchg16b (%2)"
-        : "=&a"(first), "=&d"(second)
-        : "r"(target), "a"(0), "d"(0), "b"(0), "c"(0)
+        "lock cmpxchg16b %1"
+        : "+A"(ret)
+        : "m"(*target), "b"(0), "c"(0)
         : "cc");
-    return ConversionPair64(first, second);
+    return ret;
   }
 
   ALWAYS_INLINE static void AtomicStoreRelease16B(
