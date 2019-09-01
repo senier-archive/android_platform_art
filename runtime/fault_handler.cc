@@ -29,7 +29,7 @@
 #include "mirror/class.h"
 #include "mirror/object_reference.h"
 #include "oat_quick_method_header.h"
-#include "sigchain.h"
+#include <sigchain.h>
 #include "thread-current-inl.h"
 #include "verify_object-inl.h"
 
