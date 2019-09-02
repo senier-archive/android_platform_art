@@ -94,7 +94,7 @@ std::unique_ptr<RuntimeParser> ParsedOptions::MakeParser(bool ignore_unrecognize
           .IntoKey(M::JniOptsForceCopy)
       .Define("-XjdwpProvider:_")
           .WithType<JdwpProvider>()
-          .IntoKey(M::JdwpProvider)
+          .IntoKey(M::JdwpProviderX)
       .Define({"-Xrunjdwp:_", "-agentlib:jdwp=_", "-XjdwpOptions:_"})
           .WithType<std::string>()
           .IntoKey(M::JdwpOptions)

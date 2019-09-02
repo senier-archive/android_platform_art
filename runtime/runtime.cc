@@ -1294,7 +1294,7 @@ bool Runtime::Init(RuntimeArgumentMap&& runtime_options_in) {
   dump_gc_performance_on_shutdown_ = runtime_options.Exists(Opt::DumpGCPerformanceOnShutdown);
 
   jdwp_options_ = runtime_options.GetOrDefault(Opt::JdwpOptions);
-  jdwp_provider_ = runtime_options.GetOrDefault(Opt::JdwpProvider);
+  jdwp_provider_ = runtime_options.GetOrDefault(Opt::JdwpProviderX);
   switch (jdwp_provider_) {
     case JdwpProvider::kNone: {
       VLOG(jdwp) << "Disabling all JDWP support.";
