@@ -200,8 +200,27 @@ class MipsManagedRegister : public ManagedRegister {
     return id_;
   }
 
-  int AllocIdLow() const;
-  int AllocIdHigh() const;
+  constexpr int AllocIdLow() const {
+    CHECK(IsOverlappingDRegister() || IsRegisterPair());
+    const int r = RegId() - (kNumberOfCoreRegIds + kNumberOfFRegIds);
+    int low = 0;
+    if (r < kNumberOfOverlappingDRegIds) {
+      CHECK(IsOverlappingDRegister());
+      low = (r * 2) + kNumberOfCoreRegIds;  // Return an FRegister.
+    } else {
+      CHECK(IsRegisterPair());
+      low = (r - kNumberOfDRegIds) * 2 + 2;  // Return a Register.
+      if (low >= 24) {
+        // we got a pair higher than S6_S7, must be the dalvik special case
+        low = 5;
+      }
+    }
+    return low;
+  }
+
+  constexpr int AllocIdHigh() const {
+    return AllocIdLow() + 1;
+  }
 
   friend class ManagedRegister;
 

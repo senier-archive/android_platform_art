@@ -260,7 +260,7 @@ class ArmManagedRegister : public ManagedRegister {
     return (0 <= id_) && (id_ < kNumberOfRegIds);
   }
 
-  int RegId() const {
+  constexpr int RegId() const {
     CHECK(!IsNoRegister());
     return id_;
   }
@@ -276,8 +276,27 @@ class ArmManagedRegister : public ManagedRegister {
     return r;
   }
 
-  int AllocIdLow() const;
-  int AllocIdHigh() const;
+  constexpr int AllocIdLow() const {
+    CHECK(IsOverlappingDRegister() || IsRegisterPair());
+    const int r = RegId() - (kNumberOfCoreRegIds + kNumberOfSRegIds);
+    int low = 0;
+    if (r < kNumberOfOverlappingDRegIds) {
+      CHECK(IsOverlappingDRegister());
+      low = (r * 2) + kNumberOfCoreRegIds;  // Return a SRegister.
+    } else {
+      CHECK(IsRegisterPair());
+      low = (r - kNumberOfDRegIds) * 2;  // Return a Register.
+      if (low > 6) {
+        // we didn't got a pair higher than R6_R7, must be the dalvik special case
+        low = 1;
+      }
+    }
+    return low;
+  }
+
+  constexpr int AllocIdHigh() const {
+    return AllocIdLow() + 1;
+  }
 
   friend class ManagedRegister;
 

@@ -49,30 +49,6 @@ bool MipsManagedRegister::Overlaps(const MipsManagedRegister& other) const {
 }
 
 
-int MipsManagedRegister::AllocIdLow() const {
-  CHECK(IsOverlappingDRegister() || IsRegisterPair());
-  const int r = RegId() - (kNumberOfCoreRegIds + kNumberOfFRegIds);
-  int low;
-  if (r < kNumberOfOverlappingDRegIds) {
-    CHECK(IsOverlappingDRegister());
-    low = (r * 2) + kNumberOfCoreRegIds;  // Return an FRegister.
-  } else {
-    CHECK(IsRegisterPair());
-    low = (r - kNumberOfDRegIds) * 2 + 2;  // Return a Register.
-    if (low >= 24) {
-      // we got a pair higher than S6_S7, must be the dalvik special case
-      low = 5;
-    }
-  }
-  return low;
-}
-
-
-int MipsManagedRegister::AllocIdHigh() const {
-  return AllocIdLow() + 1;
-}
-
-
 void MipsManagedRegister::Print(std::ostream& os) const {
   if (!IsValidManagedRegister()) {
     os << "No Register";

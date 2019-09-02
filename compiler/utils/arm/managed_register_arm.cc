@@ -48,30 +48,6 @@ bool ArmManagedRegister::Overlaps(const ArmManagedRegister& other) const {
 }
 
 
-int ArmManagedRegister::AllocIdLow() const {
-  CHECK(IsOverlappingDRegister() || IsRegisterPair());
-  const int r = RegId() - (kNumberOfCoreRegIds + kNumberOfSRegIds);
-  int low;
-  if (r < kNumberOfOverlappingDRegIds) {
-    CHECK(IsOverlappingDRegister());
-    low = (r * 2) + kNumberOfCoreRegIds;  // Return a SRegister.
-  } else {
-    CHECK(IsRegisterPair());
-    low = (r - kNumberOfDRegIds) * 2;  // Return a Register.
-    if (low > 6) {
-      // we didn't got a pair higher than R6_R7, must be the dalvik special case
-      low = 1;
-    }
-  }
-  return low;
-}
-
-
-int ArmManagedRegister::AllocIdHigh() const {
-  return AllocIdLow() + 1;
-}
-
-
 void ArmManagedRegister::Print(std::ostream& os) const {
   if (!IsValidManagedRegister()) {
     os << "No Register";

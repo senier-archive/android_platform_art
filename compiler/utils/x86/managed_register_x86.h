@@ -43,6 +43,34 @@ enum RegisterPair {
   kNoRegisterPair = -1,
 };
 
+// Define register pairs.
+// This list must be kept in sync with the RegisterPair enum.
+#define REGISTER_PAIR_LIST(P) \
+  P(EAX, EDX)                 \
+  P(EAX, ECX)                 \
+  P(EAX, EBX)                 \
+  P(EAX, EDI)                 \
+  P(EDX, ECX)                 \
+  P(EDX, EBX)                 \
+  P(EDX, EDI)                 \
+  P(ECX, EBX)                 \
+  P(ECX, EDI)                 \
+  P(EBX, EDI)                 \
+  P(ECX, EDX)
+
+
+struct RegisterPairDescriptor {
+  RegisterPair reg;  // Used to verify that the enum is in sync.
+  Register low;
+  Register high;
+};
+
+constexpr static const RegisterPairDescriptor kRegisterPairs[] = {
+#define REGISTER_PAIR_ENUMERATION(low, high) { low##_##high, low, high },
+  REGISTER_PAIR_LIST(REGISTER_PAIR_ENUMERATION)
+#undef REGISTER_PAIR_ENUMERATION
+};
+
 std::ostream& operator<<(std::ostream& os, const RegisterPair& reg);
 
 const int kNumberOfCpuRegIds = kNumberOfCpuRegisters;
@@ -197,8 +225,21 @@ class X86ManagedRegister : public ManagedRegister {
     return id_;
   }
 
-  int AllocIdLow() const;
-  int AllocIdHigh() const;
+  constexpr int AllocIdLow() const {
+    CHECK(IsRegisterPair());
+    const int r = RegId() - (kNumberOfCpuRegIds + kNumberOfXmmRegIds +
+                             kNumberOfX87RegIds);
+    CHECK_EQ(r, kRegisterPairs[r].reg);
+    return kRegisterPairs[r].low;
+  }
+
+  constexpr int AllocIdHigh() const {
+    CHECK(IsRegisterPair());
+    const int r = RegId() - (kNumberOfCpuRegIds + kNumberOfXmmRegIds +
+                             kNumberOfX87RegIds);
+    CHECK_EQ(r, kRegisterPairs[r].reg);
+    return kRegisterPairs[r].high;
+  }
 
   friend class ManagedRegister;
 
