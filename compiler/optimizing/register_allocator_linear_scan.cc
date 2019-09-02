@@ -820,7 +820,7 @@ int RegisterAllocatorLinearScan::FindAvailableRegister(size_t* next_use, LiveInt
 }
 
 // Remove interval and its other half if any. Return iterator to the following element.
-static ArenaVector<LiveInterval*>::iterator RemoveIntervalAndPotentialOtherHalf(
+static ScopedArenaVector<LiveInterval*>::iterator RemoveIntervalAndPotentialOtherHalf(
     ScopedArenaVector<LiveInterval*>* intervals, ScopedArenaVector<LiveInterval*>::iterator pos) {
   DCHECK(intervals->begin() <= pos && pos < intervals->end());
   LiveInterval* interval = *pos;
