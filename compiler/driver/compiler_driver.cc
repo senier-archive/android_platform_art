@@ -20,7 +20,7 @@
 #include <unordered_set>
 #include <vector>
 
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(__GENODE__)
 #include <malloc.h>  // For mallinfo
 #endif
 
