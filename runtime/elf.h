@@ -17,6 +17,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include <sys/elf.h>
+#ifndef ART_RUNTIME_ELF_H_
+#define ART_RUNTIME_ELF_H_
+#endif
+
 // BEGIN android-changed
 #ifndef ART_RUNTIME_ELF_H_
 #define ART_RUNTIME_ELF_H_

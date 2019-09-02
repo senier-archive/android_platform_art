@@ -35,10 +35,12 @@ namespace art {
 
 #define EI_ABIVERSION 8
 #define EM_ARM 40
+#ifndef __GENODE__
 #define EF_MIPS_NOREORDER 1
 #define EF_MIPS_PIC 2
 #define EF_MIPS_CPIC 4
 #define STV_DEFAULT 0
+#endif // __GENODE__
 
 #define EM_AARCH64 183
 
