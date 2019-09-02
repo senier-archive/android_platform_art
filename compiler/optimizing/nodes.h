@@ -2642,7 +2642,7 @@ template<intptr_t N>
 class HExpression : public HTemplateInstruction<N> {
  public:
   using HInstruction::InstructionKind;
-  HExpression<N>(InstructionKind kind,
+  HExpression<N>(HInstruction::InstructionKind kind,
                  DataType::Type type,
                  SideEffects side_effects,
                  uint32_t dex_pc)
