@@ -178,6 +178,8 @@ void CommonRuntimeTestImpl::SetUpAndroidRoot() {
         root += "/out/host/linux-x86";
 #elif defined(__APPLE__)
         root += "/out/host/darwin-x86";
+#elif defined(__GENODE__)
+        root += "/out";
 #else
 #error unsupported OS
 #endif
