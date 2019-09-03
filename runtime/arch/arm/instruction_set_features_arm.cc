@@ -221,7 +221,7 @@ ArmFeaturesUniquePtr ArmInstructionSetFeatures::FromHwcap() {
 static void bad_instr_handle(int signo ATTRIBUTE_UNUSED,
                             siginfo_t* si ATTRIBUTE_UNUSED,
                             void* data) {
-#if defined(__arm__)
+#if defined(__arm__) && !defined(__GENODE__)
   struct ucontext *uc = (struct ucontext *)data;
   struct sigcontext *sc = &uc->uc_mcontext;
   sc->arm_r0 = 0;     // Set R0 to #0 to signal error.
