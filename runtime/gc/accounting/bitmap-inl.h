@@ -30,7 +30,7 @@ namespace art {
 namespace gc {
 namespace accounting {
 
-inline bool Bitmap::AtomicTestAndSetBit(uintptr_t bit_index) {
+inline bool Bitmap::AtomicTestAndSetBit(size_t bit_index) {
   CheckValidBitIndex(bit_index);
   const size_t word_index = BitIndexToWordIndex(bit_index);
   const uintptr_t word_mask = BitIndexToMask(bit_index);
@@ -48,13 +48,13 @@ inline bool Bitmap::AtomicTestAndSetBit(uintptr_t bit_index) {
   return false;
 }
 
-inline bool Bitmap::TestBit(uintptr_t bit_index) const {
+inline bool Bitmap::TestBit(size_t bit_index) const {
   CheckValidBitIndex(bit_index);
   return (bitmap_begin_[BitIndexToWordIndex(bit_index)] & BitIndexToMask(bit_index)) != 0;
 }
 
 template<typename Visitor>
-inline void Bitmap::VisitSetBits(uintptr_t bit_start, uintptr_t bit_end, const Visitor& visitor)
+inline void Bitmap::VisitSetBits(uintptr_t bit_start, size_t bit_end, const Visitor& visitor)
     const {
   DCHECK_LE(bit_start, bit_end);
   CheckValidBitIndex(bit_start);

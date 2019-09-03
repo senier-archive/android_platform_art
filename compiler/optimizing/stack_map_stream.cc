@@ -354,7 +354,7 @@ void StackMapStream::FillInCodeInfo(MemoryRegion region) {
   DCHECK_EQ(location_catalog_offset, dex_register_location_catalog_region.size());
 
   ArenaBitVector empty_bitmask(allocator_, 0, /* expandable */ false, kArenaAllocStackMapStream);
-  uintptr_t next_dex_register_map_offset = 0;
+  size_t next_dex_register_map_offset = 0;
   uintptr_t next_inline_info_index = 0;
   size_t invoke_info_idx = 0;
   for (size_t i = 0, e = stack_maps_.size(); i < e; ++i) {
