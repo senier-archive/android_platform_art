@@ -147,7 +147,7 @@ struct count_refs_helper<Arg, Args ...> {
       (jni_type_traits<Arg>::is_ref ? 1 : 0) + count_refs_helper<Args ...>::value;
 };
 
-template <typename T, T fn>
+template <typename T, T *fn>
 struct count_refs_fn_helper;
 
 template <typename R, typename ... Args, R fn(Args...)>
@@ -200,7 +200,7 @@ size_t count_nonnull_refs(Args ... args) {
   return count_nonnull_refs_helper(args...);
 }
 
-template <typename T, T fn>
+template <typename T, T *fn>
 struct remove_extra_parameters_helper;
 
 template <typename R, typename Arg1, typename Arg2, typename ... Args, R fn(Arg1, Arg2, Args...)>
@@ -216,7 +216,7 @@ struct remove_extra_parameters_helper<R(Arg1, Arg2, Args...), fn> {
 // Given a function 'fn' create a function 'apply' which will omit the JNIEnv/jklass parameters
 //
 // i.e. if fn(JNIEnv*,jklass,a,b,c,d,e...) then apply(a,b,c,d,e,...)
-template <typename T, T fn>
+template <typename T, T *fn>
 struct jni_remove_extra_parameters : public remove_extra_parameters_helper<T, fn> {};
 
 class JniCompilerTest : public CommonCompilerTest {
@@ -575,7 +575,7 @@ static void expectNumStackReferences(size_t val1, size_t val2) {
 
 #define EXPECT_NUM_STACK_REFERENCES(val1, val2) expectNumStackReferences(val1, val2)
 
-template <typename T, T fn>
+template <typename T, T *fn>
 struct make_jni_test_decorator;
 
 // Decorator for "static" JNI callbacks.
