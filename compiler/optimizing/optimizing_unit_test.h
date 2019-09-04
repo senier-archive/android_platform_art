@@ -54,6 +54,7 @@ namespace art {
 #define FIVE_REGISTERS_CODE_ITEM(...)  N_REGISTERS_CODE_ITEM(5, __VA_ARGS__)
 #define SIX_REGISTERS_CODE_ITEM(...)   N_REGISTERS_CODE_ITEM(6, __VA_ARGS__)
 
+static
 LiveInterval* BuildInterval(const size_t ranges[][2],
                             size_t number_of_ranges,
                             ScopedArenaAllocator* allocator,
@@ -71,6 +72,7 @@ LiveInterval* BuildInterval(const size_t ranges[][2],
   return interval;
 }
 
+static
 void RemoveSuspendChecks(HGraph* graph) {
   for (HBasicBlock* block : graph->GetBlocks()) {
     if (block != nullptr) {
