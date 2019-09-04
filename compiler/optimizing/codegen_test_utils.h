@@ -333,6 +333,7 @@ static void RunCode(CodegenTargetConfig target_config,
 }
 
 #ifdef ART_ENABLE_CODEGEN_arm
+static
 CodeGenerator* create_codegen_arm_vixl32(HGraph* graph, const CompilerOptions& compiler_options) {
   std::unique_ptr<const ArmInstructionSetFeatures> features_arm(
       ArmInstructionSetFeatures::FromCppDefines());
@@ -342,6 +343,7 @@ CodeGenerator* create_codegen_arm_vixl32(HGraph* graph, const CompilerOptions& c
 #endif
 
 #ifdef ART_ENABLE_CODEGEN_arm64
+static
 CodeGenerator* create_codegen_arm64(HGraph* graph, const CompilerOptions& compiler_options) {
   std::unique_ptr<const Arm64InstructionSetFeatures> features_arm64(
       Arm64InstructionSetFeatures::FromCppDefines());
@@ -351,6 +353,7 @@ CodeGenerator* create_codegen_arm64(HGraph* graph, const CompilerOptions& compil
 #endif
 
 #ifdef ART_ENABLE_CODEGEN_x86
+static
 CodeGenerator* create_codegen_x86(HGraph* graph, const CompilerOptions& compiler_options) {
   std::unique_ptr<const X86InstructionSetFeatures> features_x86(
       X86InstructionSetFeatures::FromCppDefines());
@@ -360,6 +363,7 @@ CodeGenerator* create_codegen_x86(HGraph* graph, const CompilerOptions& compiler
 #endif
 
 #ifdef ART_ENABLE_CODEGEN_x86_64
+static
 CodeGenerator* create_codegen_x86_64(HGraph* graph, const CompilerOptions& compiler_options) {
   std::unique_ptr<const X86_64InstructionSetFeatures> features_x86_64(
      X86_64InstructionSetFeatures::FromCppDefines());
@@ -369,6 +373,7 @@ CodeGenerator* create_codegen_x86_64(HGraph* graph, const CompilerOptions& compi
 #endif
 
 #ifdef ART_ENABLE_CODEGEN_mips
+static
 CodeGenerator* create_codegen_mips(HGraph* graph, const CompilerOptions& compiler_options) {
   std::unique_ptr<const MipsInstructionSetFeatures> features_mips(
       MipsInstructionSetFeatures::FromCppDefines());
@@ -378,6 +383,7 @@ CodeGenerator* create_codegen_mips(HGraph* graph, const CompilerOptions& compile
 #endif
 
 #ifdef ART_ENABLE_CODEGEN_mips64
+static
 CodeGenerator* create_codegen_mips64(HGraph* graph, const CompilerOptions& compiler_options) {
   std::unique_ptr<const Mips64InstructionSetFeatures> features_mips64(
       Mips64InstructionSetFeatures::FromCppDefines());
