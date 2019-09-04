@@ -27,7 +27,9 @@
 #include "globals.h"
 #include "thread-current-inl.h"
 
-#if defined(__APPLE__)
+#if defined(__GENODE__)
+// Empty, definitions are in gart/sys/ucontext.h
+#elif defined(__APPLE__)
 #define ucontext __darwin_ucontext
 
 #if defined(__x86_64__)
