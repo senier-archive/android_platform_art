@@ -271,13 +271,13 @@ codes.
  * TUNING: can we do better here?
  */
 .macro GET_VREG_WIDE reg, vreg
-    add     ip2, xFP, \vreg, lsl #2
+    add     ip2, xFP, \vreg, uxtx #2
     ldr     \reg, [ip2]
 .endm
 .macro SET_VREG_WIDE reg, vreg
-    add     ip2, xFP, \vreg, lsl #2
+    add     ip2, xFP, \vreg, uxtx #2
     str     \reg, [ip2]
-    add     ip2, xREFS, \vreg, lsl #2
+    add     ip2, xREFS, \vreg, uxtx #2
     str     xzr, [ip2]
 .endm
 
@@ -293,7 +293,7 @@ codes.
  * Convert a virtual register index into an address.
  */
 .macro VREG_INDEX_TO_ADDR reg, vreg
-    add     \reg, xFP, \vreg, lsl #2   /* WARNING: handle shadow frame vreg zero if store */
+    add     \reg, xFP, \vreg, uxtx #2   /* WARNING: handle shadow frame vreg zero if store */
 .endm
 
 /*
@@ -404,9 +404,9 @@ ENTRY ExecuteMterpImpl
     mov     xSELF, x0
     ldr     w0, [x2, #SHADOWFRAME_NUMBER_OF_VREGS_OFFSET]
     add     xFP, x2, #SHADOWFRAME_VREGS_OFFSET     // point to vregs.
-    add     xREFS, xFP, w0, lsl #2                 // point to reference array in shadow frame
+    add     xREFS, xFP, w0, uxtx #2                 // point to reference array in shadow frame
     ldr     w0, [x2, #SHADOWFRAME_DEX_PC_OFFSET]   // Get starting dex_pc.
-    add     xPC, x1, w0, lsl #1                    // Create direct pointer to 1st dex opcode
+    add     xPC, x1, w0, uxtx #1                    // Create direct pointer to 1st dex opcode
     CFI_DEFINE_DEX_PC_WITH_OFFSET(CFI_TMP, CFI_DEX, 0)
     EXPORT_PC
 
@@ -429,6 +429,10 @@ ENTRY ExecuteMterpImpl
 
     .global artMterpAsmInstructionStart
 artMterpAsmInstructionStart = .L_op_nop
+
+artMterpAsmInstructionStartLoc = .L_op_nop
+#define artMterpAsmInstructionStart artMterpAsmInstructionStartLoc
+
     .text
 
 /* ------------------------------ */
@@ -1127,7 +1131,7 @@ artMterpAsmInstructionStart = .L_op_nop
     lsr     w3, wINST, #8               // w3<- AA
     orr     x1, x0, x1, lsl #16         // x1<- ssssssssBBBBbbbb
     GET_VREG w0, w3                     // w0<- vAA (array object)
-    add     x1, xPC, x1, lsl #1         // x1<- PC + ssssssssBBBBbbbb*2 (array data off.)
+    add     x1, xPC, x1, uxtx #1         // x1<- PC + ssssssssBBBBbbbb*2 (array data off.)
     bl      MterpFillArrayData          // (obj, payload)
     cbz     w0, MterpPossibleException      // exception?
     FETCH_ADVANCE_INST 3                // advance rPC, load rINST
@@ -1217,7 +1221,7 @@ artMterpAsmInstructionStart = .L_op_nop
     lsr     w3, wINST, #8               // w3<- AA
     orr     x0, x0, x1, lsl #16         // x0<- ssssssssBBBBbbbb
     GET_VREG w1, w3                     // w1<- vAA
-    add     x0, xPC, x0, lsl #1         // x0<- PC + ssssssssBBBBbbbb*2
+    add     x0, xPC, x0, uxtx #1         // x0<- PC + ssssssssBBBBbbbb*2
     bl      MterpDoPackedSwitch                       // w0<- code-unit branch offset
     sxtw    xINST, w0
     b       MterpCommonTakenBranchNoFlags
@@ -1242,7 +1246,7 @@ artMterpAsmInstructionStart = .L_op_nop
     lsr     w3, wINST, #8               // w3<- AA
     orr     x0, x0, x1, lsl #16         // x0<- ssssssssBBBBbbbb
     GET_VREG w1, w3                     // w1<- vAA
-    add     x0, xPC, x0, lsl #1         // x0<- PC + ssssssssBBBBbbbb*2
+    add     x0, xPC, x0, uxtx #1         // x0<- PC + ssssssssBBBBbbbb*2
     bl      MterpDoSparseSwitch                       // w0<- code-unit branch offset
     sxtw    xINST, w0
     b       MterpCommonTakenBranchNoFlags
@@ -1793,7 +1797,7 @@ artMterpAsmInstructionStart = .L_op_nop
     GET_VREG w1, w3                     // w1<- vCC (requested index)
     cbz     w0, common_errNullObject        // yes, bail
     ldr     w3, [x0, #MIRROR_ARRAY_LENGTH_OFFSET]    // w3<- arrayObj->length
-    add     x0, x0, w1, lsl #3          // w0<- arrayObj + index*width
+    add     x0, x0, w1, uxtx #3          // w0<- arrayObj + index*width
     cmp     w1, w3                      // compare unsigned index, length
     bcs     common_errArrayIndex        // index >= length, bail
     FETCH_ADVANCE_INST 2                // advance rPC, load wINST
@@ -1986,7 +1990,7 @@ artMterpAsmInstructionStart = .L_op_nop
     GET_VREG w1, w3                     // w1<- vCC (requested index)
     cbz     w0, common_errNullObject    // bail if null
     ldr     w3, [x0, #MIRROR_ARRAY_LENGTH_OFFSET]     // w3<- arrayObj->length
-    add     x0, x0, w1, lsl #2     // w0<- arrayObj + index*width
+    add     x0, x0, w1, uxtx #2     // w0<- arrayObj + index*width
     cmp     w1, w3                      // compare unsigned index, length
     bcs     common_errArrayIndex        // index >= length, bail
     FETCH_ADVANCE_INST 2                // advance rPC, load rINST
@@ -2012,7 +2016,7 @@ artMterpAsmInstructionStart = .L_op_nop
     GET_VREG w1, w3                     // w1<- vCC (requested index)
     cbz     w0, common_errNullObject    // bail if null
     ldr     w3, [x0, #MIRROR_ARRAY_LENGTH_OFFSET]    // w3<- arrayObj->length
-    add     x0, x0, w1, lsl #3          // w0<- arrayObj + index*width
+    add     x0, x0, w1, uxtx #3          // w0<- arrayObj + index*width
     cmp     w1, w3                      // compare unsigned index, length
     bcs     common_errArrayIndex        // index >= length, bail
     GET_VREG_WIDE x1, w4
@@ -2063,7 +2067,7 @@ artMterpAsmInstructionStart = .L_op_nop
     GET_VREG w1, w3                     // w1<- vCC (requested index)
     cbz     w0, common_errNullObject    // bail if null
     ldr     w3, [x0, #MIRROR_ARRAY_LENGTH_OFFSET]     // w3<- arrayObj->length
-    add     x0, x0, w1, lsl #0     // w0<- arrayObj + index*width
+    add     x0, x0, w1, uxtx #0     // w0<- arrayObj + index*width
     cmp     w1, w3                      // compare unsigned index, length
     bcs     common_errArrayIndex        // index >= length, bail
     FETCH_ADVANCE_INST 2                // advance rPC, load rINST
@@ -2097,7 +2101,7 @@ artMterpAsmInstructionStart = .L_op_nop
     GET_VREG w1, w3                     // w1<- vCC (requested index)
     cbz     w0, common_errNullObject    // bail if null
     ldr     w3, [x0, #MIRROR_ARRAY_LENGTH_OFFSET]     // w3<- arrayObj->length
-    add     x0, x0, w1, lsl #0     // w0<- arrayObj + index*width
+    add     x0, x0, w1, uxtx #0     // w0<- arrayObj + index*width
     cmp     w1, w3                      // compare unsigned index, length
     bcs     common_errArrayIndex        // index >= length, bail
     FETCH_ADVANCE_INST 2                // advance rPC, load rINST
@@ -2131,7 +2135,7 @@ artMterpAsmInstructionStart = .L_op_nop
     GET_VREG w1, w3                     // w1<- vCC (requested index)
     cbz     w0, common_errNullObject    // bail if null
     ldr     w3, [x0, #MIRROR_ARRAY_LENGTH_OFFSET]     // w3<- arrayObj->length
-    add     x0, x0, w1, lsl #1     // w0<- arrayObj + index*width
+    add     x0, x0, w1, uxtx #1     // w0<- arrayObj + index*width
     cmp     w1, w3                      // compare unsigned index, length
     bcs     common_errArrayIndex        // index >= length, bail
     FETCH_ADVANCE_INST 2                // advance rPC, load rINST
@@ -2165,7 +2169,7 @@ artMterpAsmInstructionStart = .L_op_nop
     GET_VREG w1, w3                     // w1<- vCC (requested index)
     cbz     w0, common_errNullObject    // bail if null
     ldr     w3, [x0, #MIRROR_ARRAY_LENGTH_OFFSET]     // w3<- arrayObj->length
-    add     x0, x0, w1, lsl #1     // w0<- arrayObj + index*width
+    add     x0, x0, w1, uxtx #1     // w0<- arrayObj + index*width
     cmp     w1, w3                      // compare unsigned index, length
     bcs     common_errArrayIndex        // index >= length, bail
     FETCH_ADVANCE_INST 2                // advance rPC, load rINST
@@ -7188,7 +7192,7 @@ MterpException:
     ldr     x0, [xFP, #OFF_FP_DEX_INSTRUCTIONS]
     ldr     w1, [xFP, #OFF_FP_DEX_PC]
     ldr     xIBASE, [xSELF, #THREAD_CURRENT_IBASE_OFFSET]
-    add     xPC, x0, x1, lsl #1                     // generate new dex_pc_ptr
+    add     xPC, x0, x1, uxtx #1                     // generate new dex_pc_ptr
     /* Do we need to switch interpreters? */
     bl      MterpShouldSwitchInterpreters
     cbnz    w0, MterpFallback
