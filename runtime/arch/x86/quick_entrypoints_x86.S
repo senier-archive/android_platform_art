@@ -414,7 +414,7 @@ NO_ARG_RUNTIME_EXCEPTION_SAVE_EVERYTHING art_quick_throw_null_pointer_exception,
     /*
      * Call installed by a signal handler to create and deliver a NullPointerException.
      */
-DEFINE_FUNCTION_CUSTOM_CFA art_quick_throw_null_pointer_exception_from_signal, 2 * __SIZEOF_POINTER__
+DEFINE_FUNCTION_CUSTOM_CFA art_quick_throw_null_pointer_exception_from_signal, (2 * __SIZEOF_POINTER__)
     // Fault address and return address were saved by the fault handler.
     // Save all registers as basis for long jump context; EDI will replace fault address later.
     SETUP_SAVE_EVERYTHING_FRAME_EDI_SAVED ebx, ebx
@@ -2530,7 +2530,7 @@ DEFINE_FUNCTION ExecuteSwitchImplAsm
 
     sub LITERAL(4), %esp     // Alignment padding
     CFI_ADJUST_CFA_OFFSET(4)
-    push %ecx                // Push argument
+    PUSH ecx                // Push argument
     CFI_ADJUST_CFA_OFFSET(4)
     call *%eax               // Call the wrapped function
     addl LITERAL(8), %esp
