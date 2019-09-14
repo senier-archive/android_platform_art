@@ -38,7 +38,7 @@
 #endif
 
 // Currently Darwin doesn't support locks with timeouts.
-#if !defined(__APPLE__)
+#if !defined(__APPLE__) && !defined(__GENODE__)
 #define HAVE_TIMED_RWLOCK 1
 #else
 #define HAVE_TIMED_RWLOCK 0
