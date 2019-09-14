@@ -351,7 +351,7 @@ void UContext::DumpArmStatusRegister(std::ostream& os, RegisterType status_regis
 }
 
 int GetTimeoutSignal() {
-#if defined(__APPLE__)
+#if defined(__APPLE__) || defined(__GENODE__)
   // Mac does not support realtime signals.
   UNUSED(kUseSigRTTimeout);
   return -1;
