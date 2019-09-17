@@ -26,6 +26,10 @@
 
 #include "android-base/thread_annotations.h"
 
+#include <base/env.h>
+#include <region_map/client.h>
+#include <region_map/region_map.h>
+
 namespace art {
 
 #if defined(__LP64__) && (defined(__aarch64__) || defined(__mips__) || defined(__APPLE__))
@@ -288,6 +292,10 @@ class MemMap {
   static std::mutex* mem_maps_lock_;
 
   friend class MemMapTest;  // To allow access to base_begin_ and base_size_.
+
+  Genode::Env &env_;
+  Genode::Ram_dataspace_capability ram_ds_cap_;
+  Genode::Region_map_client address_space_;
 };
 
 std::ostream& operator<<(std::ostream& os, const MemMap& mem_map);
