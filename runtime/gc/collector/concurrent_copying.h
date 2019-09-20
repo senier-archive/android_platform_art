@@ -300,7 +300,7 @@ class ConcurrentCopying : public GarbageCollector {
   std::vector<accounting::ObjectStack*> revoked_mark_stacks_
       GUARDED_BY(mark_stack_lock_);
   static constexpr size_t kMarkStackSize = kPageSize;
-  static constexpr size_t kMarkStackPoolSize = 256;
+  static constexpr size_t kMarkStackPoolSize = 64;
   std::vector<accounting::ObjectStack*> pooled_mark_stacks_
       GUARDED_BY(mark_stack_lock_);
   Thread* thread_running_gc_;
