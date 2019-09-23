@@ -88,7 +88,7 @@ class Primitive {
       case kPrimDouble:  return 3;
       case kPrimNot:     return ComponentSizeShiftWidth(kObjectReferenceSize);
     }
-    LOG(FATAL) << "Invalid type " << static_cast<int>(type);
+    // LOG(FATAL) << "Invalid type " << static_cast<int>(type);
     UNREACHABLE();
   }
 
@@ -105,7 +105,7 @@ class Primitive {
       case kPrimDouble:  return 8;
       case kPrimNot:     return kObjectReferenceSize;
     }
-    LOG(FATAL) << "Invalid type " << static_cast<int>(type);
+    // LOG(FATAL) << "Invalid type " << static_cast<int>(type);
     UNREACHABLE();
   }
 
@@ -130,7 +130,7 @@ class Primitive {
       case kPrimVoid:
         return "V";
       default:
-        LOG(FATAL) << "Primitive char conversion on invalid type " << static_cast<int>(type);
+        // LOG(FATAL) << "Primitive char conversion on invalid type " << static_cast<int>(type);
         return nullptr;
     }
   }
@@ -154,7 +154,7 @@ class Primitive {
       case Primitive::Type::kPrimDouble: return true;
       case Primitive::Type::kPrimVoid: return false;
     }
-    LOG(FATAL) << "Invalid type " << static_cast<int>(type);
+    // LOG(FATAL) << "Invalid type " << static_cast<int>(type);
     UNREACHABLE();
   }
 
@@ -172,7 +172,7 @@ class Primitive {
       case Primitive::Type::kPrimDouble: return true;
       case Primitive::Type::kPrimVoid: return false;
     }
-    LOG(FATAL) << "Invalid type " << static_cast<int>(type);
+    // LOG(FATAL) << "Invalid type " << static_cast<int>(type);
     UNREACHABLE();
   }
 

@@ -83,10 +83,10 @@ static constexpr size_t GetCalleeSaveFrameSize(InstructionSet isa, CalleeSaveTyp
     case InstructionSet::kX86_64:
       return x86_64::X86_64CalleeSaveFrameSize(type);
     case InstructionSet::kNone:
-      LOG(FATAL) << "kNone has no frame size";
+      // LOG(FATAL) << "kNone has no frame size";
       UNREACHABLE();
   }
-  LOG(FATAL) << "Unknown ISA " << isa;
+  // LOG(FATAL) << "Unknown ISA " << isa;
   UNREACHABLE();
 }
 
@@ -107,10 +107,10 @@ static constexpr PointerSize GetConstExprPointerSize(InstructionSet isa) {
     case InstructionSet::kX86_64:
       return kX86_64PointerSize;
     case InstructionSet::kNone:
-      LOG(FATAL) << "kNone has no pointer size";
+      // LOG(FATAL) << "kNone has no pointer size";
       UNREACHABLE();
   }
-  LOG(FATAL) << "Unknown ISA " << isa;
+  // LOG(FATAL) << "Unknown ISA " << isa;
   UNREACHABLE();
 }
 

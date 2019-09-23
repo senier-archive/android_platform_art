@@ -194,7 +194,7 @@ constexpr PointerSize ConvertToPointerSize(T any) {
   if (any == 4 || any == 8) {
     return static_cast<PointerSize>(any);
   } else {
-    LOG(FATAL);
+    // LOG(FATAL);
     UNREACHABLE();
   }
 }

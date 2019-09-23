@@ -36,7 +36,7 @@ constexpr DataType::Type DataTypeFromPrimitive(Primitive::Type type) {
     case Primitive::kPrimDouble: return DataType::Type::kFloat64;
     case Primitive::kPrimVoid: return DataType::Type::kVoid;
   }
-  LOG(FATAL) << "Unreachable";
+  // LOG(FATAL) << "Unreachable";
   UNREACHABLE();
 }
 
@@ -62,7 +62,7 @@ constexpr char DataType::TypeId(DataType::Type type) {
     case DataType::Type::kReference: return 'l';  // Java reference (L).
     case DataType::Type::kVoid: return 'v';       // Java void (V).
   }
-  LOG(FATAL) << "Unreachable";
+  // LOG(FATAL) << "Unreachable";
   UNREACHABLE();
 }
 
