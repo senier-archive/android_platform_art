@@ -36,6 +36,7 @@ static void arch_prctl(int code, void* val) {
 #endif
 
 void Thread::InitCpu() {
+#if !defined(__GENODE__)
   MutexLock mu(nullptr, *Locks::modify_ldt_lock_);
 
 #if defined(__linux__)
@@ -54,6 +55,7 @@ void Thread::InitCpu() {
       : "r"(THREAD_SELF_OFFSET)  // input
       :);  // clobber
   CHECK_EQ(self_check, this);
+#endif
 }
 
 void Thread::CleanupCpu() {
