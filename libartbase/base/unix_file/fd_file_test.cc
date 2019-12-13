@@ -24,7 +24,9 @@ namespace unix_file {
 class FdFileTest : public RandomAccessFileTest {
  protected:
   virtual RandomAccessFile* MakeTestFile() {
-    return new FdFile(fileno(tmpfile()), false);
+	char buffer[255];
+	strcpy(buffer, "/tmp/tmpfile-XXXXXX");
+    return new FdFile(mkstemp(buffer), false);
   }
 };
 
