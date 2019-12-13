@@ -1048,10 +1048,14 @@ static void GetThreadStack(pthread_t thread,
   CHECK_PTHREAD_CALL(pthread_attr_destroy, (&attributes), __FUNCTION__);
 #else
   pthread_attr_t attributes;
-  CHECK_PTHREAD_CALL(pthread_getattr_np, (thread, &attributes), __FUNCTION__);
+  pthread_attr_init(&attributes);
   CHECK_PTHREAD_CALL(pthread_attr_getstack, (&attributes, stack_base, stack_size), __FUNCTION__);
+#ifdef __GENODE__
+  *guard_size = 0;
+#else
   CHECK_PTHREAD_CALL(pthread_attr_getguardsize, (&attributes, guard_size), __FUNCTION__);
   CHECK_PTHREAD_CALL(pthread_attr_destroy, (&attributes), __FUNCTION__);
+#endif
 
 #if defined(__GLIBC__)
   // If we're the main thread, check whether we were run with an unlimited stack. In that case,
