@@ -383,18 +383,17 @@ bool FdFile::Unlink() {
 bool FdFile::Erase(bool unlink) {
   DCHECK(!read_only_mode_);
 
-  bool ret_result = true;
-  if (unlink) {
-    ret_result = Unlink();
-  }
-
   int result;
   result = SetLength(0);
   result = Flush();
   result = Close();
   // Ignore the errors.
 
-  return ret_result;
+  if (unlink) {
+    result = Unlink();
+  }
+
+  return true;
 }
 
 int FdFile::FlushCloseOrErase() {
