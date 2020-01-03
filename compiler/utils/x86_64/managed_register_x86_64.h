@@ -175,7 +175,7 @@ class X86_64ManagedRegister : public ManagedRegister {
   bool Overlaps(const X86_64ManagedRegister& other) const;
 
   static constexpr X86_64ManagedRegister FromCpuRegister(Register r) {
-    CHECK_NE(r, kNoRegister);
+    //CHECK_NE(r, kNoRegister);
     return FromRegId(r);
   }
 
@@ -184,12 +184,12 @@ class X86_64ManagedRegister : public ManagedRegister {
   }
 
   static constexpr X86_64ManagedRegister FromX87Register(X87Register r) {
-    CHECK_NE(r, kNoX87Register);
+    //CHECK_NE(r, kNoX87Register);
     return FromRegId(r + kNumberOfCpuRegIds + kNumberOfXmmRegIds);
   }
 
   static constexpr X86_64ManagedRegister FromRegisterPair(RegisterPair r) {
-    CHECK_NE(r, kNoRegisterPair);
+    //CHECK_NE(r, kNoRegisterPair);
     return FromRegId(r + (kNumberOfCpuRegIds + kNumberOfXmmRegIds +
                           kNumberOfX87RegIds));
   }
@@ -214,7 +214,7 @@ class X86_64ManagedRegister : public ManagedRegister {
     CHECK(IsRegisterPair());
     const int r = RegId() - (kNumberOfCpuRegIds + kNumberOfXmmRegIds +
                              kNumberOfX87RegIds);
-    CHECK_EQ(r, kRegisterPairs[r].reg);
+    //CHECK_EQ(r, kRegisterPairs[r].reg);
     return kRegisterPairs[r].low;
   }
 
@@ -222,7 +222,7 @@ class X86_64ManagedRegister : public ManagedRegister {
     CHECK(IsRegisterPair());
     const int r = RegId() - (kNumberOfCpuRegIds + kNumberOfXmmRegIds +
                              kNumberOfX87RegIds);
-    CHECK_EQ(r, kRegisterPairs[r].reg);
+    //CHECK_EQ(r, kRegisterPairs[r].reg);
     return kRegisterPairs[r].high;
   }
 

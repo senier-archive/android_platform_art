@@ -164,7 +164,7 @@ struct BitString {
   // What is the least-significant-bit for a position?
   // (e.g. to use with BitField{Insert,Extract,Clear}.)
   static constexpr size_t GetLsbForPosition(size_t position) {
-    DCHECK_GE(kCapacity, position);
+    //DCHECK_GE(kCapacity, position);
     return GetBitLengthTotalAtPosition(position);
   }
 

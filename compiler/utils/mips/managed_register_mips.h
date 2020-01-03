@@ -165,22 +165,22 @@ class MipsManagedRegister : public ManagedRegister {
   bool Overlaps(const MipsManagedRegister& other) const;
 
   static constexpr MipsManagedRegister FromCoreRegister(Register r) {
-    CHECK_NE(r, kNoRegister);
+    //CHECK_NE(r, kNoRegister);
     return FromRegId(r);
   }
 
   static constexpr MipsManagedRegister FromFRegister(FRegister r) {
-    CHECK_NE(r, kNoFRegister);
+    //CHECK_NE(r, kNoFRegister);
     return FromRegId(r + kNumberOfCoreRegIds);
   }
 
   static constexpr MipsManagedRegister FromDRegister(DRegister r) {
-    CHECK_NE(r, kNoDRegister);
+    //CHECK_NE(r, kNoDRegister);
     return FromRegId(r + kNumberOfCoreRegIds + kNumberOfFRegIds);
   }
 
   static constexpr MipsManagedRegister FromRegisterPair(RegisterPair r) {
-    CHECK_NE(r, kNoRegisterPair);
+    //CHECK_NE(r, kNoRegisterPair);
     return FromRegId(r + (kNumberOfCoreRegIds + kNumberOfFRegIds + kNumberOfDRegIds));
   }
 

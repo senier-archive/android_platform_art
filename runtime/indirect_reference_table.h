@@ -342,7 +342,7 @@ class IndirectReferenceTable {
 
   static constexpr uintptr_t EncodeIndex(uint32_t table_index) {
     static_assert(sizeof(IndirectRef) == sizeof(uintptr_t), "Unexpected IndirectRef size");
-    DCHECK_LE(MinimumBitsToStore(table_index), BitSizeOf<uintptr_t>() - kSerialBits - kKindBits);
+    //DCHECK_LE(MinimumBitsToStore(table_index), BitSizeOf<uintptr_t>() - kSerialBits - kKindBits);
     return (static_cast<uintptr_t>(table_index) << kKindBits << kSerialBits);
   }
   static constexpr uint32_t DecodeIndex(uintptr_t uref) {
@@ -357,7 +357,7 @@ class IndirectReferenceTable {
   }
 
   static constexpr uintptr_t EncodeSerial(uint32_t serial) {
-    DCHECK_LE(MinimumBitsToStore(serial), kSerialBits);
+    //DCHECK_LE(MinimumBitsToStore(serial), kSerialBits);
     return serial << kKindBits;
   }
   static constexpr uint32_t DecodeSerial(uintptr_t uref) {
@@ -365,7 +365,7 @@ class IndirectReferenceTable {
   }
 
   constexpr uintptr_t EncodeIndirectRef(uint32_t table_index, uint32_t serial) const {
-    DCHECK_LT(table_index, max_entries_);
+    //DCHECK_LT(table_index, max_entries_);
     return EncodeIndex(table_index) | EncodeSerial(serial) | EncodeIndirectRefKind(kind_);
   }
 

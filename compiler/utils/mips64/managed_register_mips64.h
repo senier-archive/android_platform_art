@@ -105,17 +105,17 @@ class Mips64ManagedRegister : public ManagedRegister {
   bool Overlaps(const Mips64ManagedRegister& other) const;
 
   static constexpr Mips64ManagedRegister FromGpuRegister(GpuRegister r) {
-    CHECK_NE(r, kNoGpuRegister);
+    //CHECK_NE(r, kNoGpuRegister);
     return FromRegId(r);
   }
 
   static constexpr Mips64ManagedRegister FromFpuRegister(FpuRegister r) {
-    CHECK_NE(r, kNoFpuRegister);
+    //CHECK_NE(r, kNoFpuRegister);
     return FromRegId(r + kNumberOfGpuRegIds);
   }
 
   static constexpr Mips64ManagedRegister FromVectorRegister(VectorRegister r) {
-    CHECK_NE(r, kNoVectorRegister);
+    //CHECK_NE(r, kNoVectorRegister);
     return FromRegId(r + kNumberOfGpuRegIds + kNumberOfFpuRegIds);
   }
 
@@ -131,7 +131,7 @@ class Mips64ManagedRegister : public ManagedRegister {
 
   int AllocId() const {
     CHECK(IsValidManagedRegister());
-    CHECK_LT(id_, kNumberOfAllocIds);
+    //CHECK_LT(id_, kNumberOfAllocIds);
     return id_;
   }
 

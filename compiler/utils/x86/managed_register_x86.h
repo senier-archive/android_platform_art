@@ -119,7 +119,7 @@ class X86ManagedRegister : public ManagedRegister {
  public:
   constexpr ByteRegister AsByteRegister() const {
     CHECK(IsCpuRegister());
-    CHECK_LT(AsCpuRegister(), ESP);  // ESP, EBP, ESI and EDI cannot be encoded as byte registers.
+    //CHECK_LT(AsCpuRegister(), ESP);  // ESP, EBP, ESI and EDI cannot be encoded as byte registers.
     return static_cast<ByteRegister>(id_);
   }
 
@@ -189,22 +189,22 @@ class X86ManagedRegister : public ManagedRegister {
   bool Overlaps(const X86ManagedRegister& other) const;
 
   static constexpr X86ManagedRegister FromCpuRegister(Register r) {
-    CHECK_NE(r, kNoRegister);
+    //CHECK_NE(r, kNoRegister);
     return FromRegId(r);
   }
 
   static constexpr X86ManagedRegister FromXmmRegister(XmmRegister r) {
-    CHECK_NE(r, kNoXmmRegister);
+    //CHECK_NE(r, kNoXmmRegister);
     return FromRegId(r + kNumberOfCpuRegIds);
   }
 
   static constexpr X86ManagedRegister FromX87Register(X87Register r) {
-    CHECK_NE(r, kNoX87Register);
+    //CHECK_NE(r, kNoX87Register);
     return FromRegId(r + kNumberOfCpuRegIds + kNumberOfXmmRegIds);
   }
 
   static constexpr X86ManagedRegister FromRegisterPair(RegisterPair r) {
-    CHECK_NE(r, kNoRegisterPair);
+    //CHECK_NE(r, kNoRegisterPair);
     return FromRegId(r + (kNumberOfCpuRegIds + kNumberOfXmmRegIds +
                           kNumberOfX87RegIds));
   }
@@ -229,7 +229,7 @@ class X86ManagedRegister : public ManagedRegister {
     CHECK(IsRegisterPair());
     const int r = RegId() - (kNumberOfCpuRegIds + kNumberOfXmmRegIds +
                              kNumberOfX87RegIds);
-    CHECK_EQ(r, kRegisterPairs[r].reg);
+    //CHECK_EQ(r, kRegisterPairs[r].reg);
     return kRegisterPairs[r].low;
   }
 
@@ -237,7 +237,7 @@ class X86ManagedRegister : public ManagedRegister {
     CHECK(IsRegisterPair());
     const int r = RegId() - (kNumberOfCpuRegIds + kNumberOfXmmRegIds +
                              kNumberOfX87RegIds);
-    CHECK_EQ(r, kRegisterPairs[r].reg);
+    //CHECK_EQ(r, kRegisterPairs[r].reg);
     return kRegisterPairs[r].high;
   }
 

@@ -49,7 +49,7 @@ constexpr int CLZ(T x) {
   static_assert(std::numeric_limits<T>::radix == 2, "Unexpected radix!");
   static_assert(sizeof(T) == sizeof(uint64_t) || sizeof(T) <= sizeof(uint32_t),
                 "Unsupported sizeof(T)");
-  DCHECK_NE(x, 0u);
+  //DCHECK_NE(x, 0u);
   constexpr bool is_64_bit = (sizeof(T) == sizeof(uint64_t));
   constexpr size_t adjustment =
       is_64_bit ? 0u : std::numeric_limits<uint32_t>::digits - std::numeric_limits<T>::digits;
@@ -71,7 +71,7 @@ constexpr int CTZ(T x) {
   // that T is an unsigned type.
   static_assert(sizeof(T) == sizeof(uint64_t) || sizeof(T) <= sizeof(uint32_t),
                 "Unsupported sizeof(T)");
-  DCHECK_NE(x, static_cast<T>(0));
+  //DCHECK_NE(x, static_cast<T>(0));
   return (sizeof(T) == sizeof(uint64_t)) ? __builtin_ctzll(x) : __builtin_ctz(x);
 }
 
@@ -255,8 +255,8 @@ inline bool IsInt(size_t N, T value) {
 
 template <typename T>
 constexpr T GetIntLimit(size_t bits) {
-  DCHECK_NE(bits, 0u);
-  DCHECK_LT(bits, BitSizeOf<T>());
+  //DCHECK_NE(bits, 0u);
+  //DCHECK_LT(bits, BitSizeOf<T>());
   return static_cast<T>(1) << (bits - 1);
 }
 
@@ -303,7 +303,7 @@ constexpr bool IsAbsoluteUint(T value) {
 template <typename T>
 constexpr T MaxInt(size_t bits) {
   DCHECK(std::is_unsigned<T>::value || bits > 0u) << "bits cannot be zero for signed.";
-  DCHECK_LE(bits, BitSizeOf<T>());
+  //DCHECK_LE(bits, BitSizeOf<T>());
   using unsigned_type = typename std::make_unsigned<T>::type;
   return bits == BitSizeOf<T>()
       ? std::numeric_limits<T>::max()
@@ -315,7 +315,7 @@ constexpr T MaxInt(size_t bits) {
 template <typename T>
 constexpr T MinInt(size_t bits) {
   DCHECK(std::is_unsigned<T>::value || bits > 0) << "bits cannot be zero for signed.";
-  DCHECK_LE(bits, BitSizeOf<T>());
+  //DCHECK_LE(bits, BitSizeOf<T>());
   return bits == BitSizeOf<T>()
       ? std::numeric_limits<T>::min()
       : std::is_signed<T>::value
@@ -388,7 +388,7 @@ inline static uint64_t ReverseBits64(uint64_t opnd) {
 // msb                           lsb
 template <typename T = size_t>
 inline static constexpr std::make_unsigned_t<T> MaskLeastSignificant(size_t bits) {
-  DCHECK_GE(BitSizeOf<T>(), bits) << "Bits out of range for type T";
+  //DCHECK_GE(BitSizeOf<T>(), bits) << "Bits out of range for type T";
   using unsigned_T = std::make_unsigned_t<T>;
   if (bits >= BitSizeOf<T>()) {
     return std::numeric_limits<unsigned_T>::max();
@@ -415,7 +415,7 @@ inline static constexpr std::make_unsigned_t<T> MaskLeastSignificant(size_t bits
 //                       lsb      0
 template <typename T>
 inline static constexpr T BitFieldClear(T value, size_t lsb, size_t width) {
-  DCHECK_GE(BitSizeOf(value), lsb + width) << "Bit field out of range for value";
+  //DCHECK_GE(BitSizeOf(value), lsb + width) << "Bit field out of range for value";
   const auto val = static_cast<std::make_unsigned_t<T>>(value);
   const auto mask = MaskLeastSignificant<T>(width);
 
@@ -442,12 +442,12 @@ inline static constexpr T BitFieldClear(T value, size_t lsb, size_t width) {
 
 template <typename T, typename T2>
 inline static constexpr T BitFieldInsert(T value, T2 data, size_t lsb, size_t width) {
-  DCHECK_GE(BitSizeOf(value), lsb + width) << "Bit field out of range for value";
+  //DCHECK_GE(BitSizeOf(value), lsb + width) << "Bit field out of range for value";
   if (width != 0u) {
-    DCHECK_GE(MaxInt<T2>(width), data) << "Data out of range [too large] for bitwidth";
-    DCHECK_LE(MinInt<T2>(width), data) << "Data out of range [too small] for bitwidth";
+    //DCHECK_GE(MaxInt<T2>(width), data) << "Data out of range [too large] for bitwidth";
+    //DCHECK_LE(MinInt<T2>(width), data) << "Data out of range [too small] for bitwidth";
   } else {
-    DCHECK_EQ(static_cast<T2>(0), data) << "Data out of range [nonzero] for bitwidth 0";
+    //DCHECK_EQ(static_cast<T2>(0), data) << "Data out of range [nonzero] for bitwidth 0";
   }
   const auto data_mask = MaskLeastSignificant<T2>(width);
   const auto value_cleared = BitFieldClear(value, lsb, width);
@@ -479,7 +479,7 @@ inline static constexpr T BitFieldInsert(T value, T2 data, size_t lsb, size_t wi
 // where S is the highest bit in 'bitfield'.
 template <typename T>
 inline static constexpr T BitFieldExtract(T value, size_t lsb, size_t width) {
-  DCHECK_GE(BitSizeOf(value), lsb + width) << "Bit field out of range for value";
+  //DCHECK_GE(BitSizeOf(value), lsb + width) << "Bit field out of range for value";
   const auto val = static_cast<std::make_unsigned_t<T>>(value);
 
   const T bitfield_unsigned =

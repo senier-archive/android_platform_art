@@ -147,35 +147,35 @@ class Arm64ManagedRegister : public ManagedRegister {
   void Print(std::ostream& os) const;
 
   static constexpr Arm64ManagedRegister FromXRegister(XRegister r) {
-    CHECK_NE(r, kNoRegister);
+    //CHECK_NE(r, kNoRegister);
     return FromRegId(r);
   }
 
   static constexpr Arm64ManagedRegister FromWRegister(WRegister r) {
-    CHECK_NE(r, kNoWRegister);
+    //CHECK_NE(r, kNoWRegister);
     return FromRegId(r + kNumberOfXRegIds);
   }
 
   static constexpr Arm64ManagedRegister FromDRegister(DRegister r) {
-    CHECK_NE(r, kNoDRegister);
+    //CHECK_NE(r, kNoDRegister);
     return FromRegId(r + (kNumberOfXRegIds + kNumberOfWRegIds));
   }
 
   static constexpr Arm64ManagedRegister FromSRegister(SRegister r) {
-    CHECK_NE(r, kNoSRegister);
+    //CHECK_NE(r, kNoSRegister);
     return FromRegId(r + (kNumberOfXRegIds + kNumberOfWRegIds +
                           kNumberOfDRegIds));
   }
 
   // Returns the X register overlapping W register r.
   static constexpr Arm64ManagedRegister FromWRegisterX(WRegister r) {
-    CHECK_NE(r, kNoWRegister);
+    //CHECK_NE(r, kNoWRegister);
     return FromRegId(r);
   }
 
   // Return the D register overlapping S register r.
   static constexpr Arm64ManagedRegister FromSRegisterD(SRegister r) {
-    CHECK_NE(r, kNoSRegister);
+    //CHECK_NE(r, kNoSRegister);
     return FromRegId(r + (kNumberOfXRegIds + kNumberOfWRegIds));
   }
 

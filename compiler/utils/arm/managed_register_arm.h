@@ -213,22 +213,22 @@ class ArmManagedRegister : public ManagedRegister {
   void Print(std::ostream& os) const;
 
   static constexpr ArmManagedRegister FromCoreRegister(Register r) {
-    CHECK_NE(r, kNoRegister);
+    //CHECK_NE(r, kNoRegister);
     return FromRegId(r);
   }
 
   static constexpr ArmManagedRegister FromSRegister(SRegister r) {
-    CHECK_NE(r, kNoSRegister);
+    //CHECK_NE(r, kNoSRegister);
     return FromRegId(r + kNumberOfCoreRegIds);
   }
 
   static constexpr ArmManagedRegister FromDRegister(DRegister r) {
-    CHECK_NE(r, kNoDRegister);
+    //CHECK_NE(r, kNoDRegister);
     return FromRegId(r + (kNumberOfCoreRegIds + kNumberOfSRegIds));
   }
 
   static constexpr ArmManagedRegister FromRegisterPair(RegisterPair r) {
-    CHECK_NE(r, kNoRegisterPair);
+    //CHECK_NE(r, kNoRegisterPair);
     return FromRegId(r + (kNumberOfCoreRegIds +
                           kNumberOfSRegIds + kNumberOfDRegIds));
   }
@@ -236,10 +236,10 @@ class ArmManagedRegister : public ManagedRegister {
   // Return a RegisterPair consisting of Register r_low and r_low + 1.
   static constexpr ArmManagedRegister FromCoreRegisterPair(Register r_low) {
     if (r_low != R1) {  // not the dalvik special case
-      CHECK_NE(r_low, kNoRegister);
-      CHECK_EQ(0, (r_low % 2));
+      //CHECK_NE(r_low, kNoRegister);
+      //CHECK_EQ(0, (r_low % 2));
       const int r = r_low / 2;
-      CHECK_LT(r, kNumberOfPairRegIds);
+      //CHECK_LT(r, kNumberOfPairRegIds);
       return FromRegisterPair(static_cast<RegisterPair>(r));
     } else {
       return FromRegisterPair(R1_R2);
@@ -248,10 +248,10 @@ class ArmManagedRegister : public ManagedRegister {
 
   // Return a DRegister overlapping SRegister r_low and r_low + 1.
   static constexpr ArmManagedRegister FromSRegisterPair(SRegister r_low) {
-    CHECK_NE(r_low, kNoSRegister);
-    CHECK_EQ(0, (r_low % 2));
+    //CHECK_NE(r_low, kNoSRegister);
+    //CHECK_EQ(0, (r_low % 2));
     const int r = r_low / 2;
-    CHECK_LT(r, kNumberOfOverlappingDRegIds);
+    //CHECK_LT(r, kNumberOfOverlappingDRegIds);
     return FromDRegister(static_cast<DRegister>(r));
   }
 
