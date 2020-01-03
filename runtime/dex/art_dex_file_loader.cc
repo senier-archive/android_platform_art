@@ -398,8 +398,11 @@ std::unique_ptr<const DexFile> ArtDexFileLoader::OpenOneDexFileFromZip(
     return nullptr;
   }
   VerifyResult verify_result;
-  std::unique_ptr<DexFile> dex_file = OpenCommon(map->Begin(),
-                                                 map->Size(),
+  // FIXME: Crashes when map->...() used in parameter list below
+  auto b = map->Begin();
+  auto s = map->Size();
+  std::unique_ptr<DexFile> dex_file = OpenCommon(b,
+                                                 s,
                                                  /*data_base*/ nullptr,
                                                  /*data_size*/ 0u,
                                                  location,
