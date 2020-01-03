@@ -50,11 +50,13 @@ ThreadPoolWorker::ThreadPoolWorker(ThreadPool* thread_pool, const std::string& n
                                     false, false, &error_msg));
   CHECK(stack_.get() != nullptr) << error_msg;
   CHECK_ALIGNED(stack_->Begin(), kPageSize);
+#ifndef __GENODE__
   CheckedCall(mprotect,
               "mprotect bottom page of thread pool worker stack",
               stack_->Begin(),
               kPageSize,
               PROT_NONE);
+#endif
   const char* reason = "new thread pool worker thread";
   pthread_attr_t attr;
   CHECK_PTHREAD_CALL(pthread_attr_init, (&attr), reason);

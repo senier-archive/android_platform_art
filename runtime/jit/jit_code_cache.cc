@@ -291,6 +291,7 @@ JitCodeCache::JitCodeCache(MemMap* code_map,
 
   SetFootprintLimit(current_capacity_);
 
+#ifndef __GENODE__
   CheckedCall(mprotect,
               "mprotect jit code cache",
               code_map_->Begin(),
@@ -301,6 +302,7 @@ JitCodeCache::JitCodeCache(MemMap* code_map,
               data_map_->Begin(),
               data_map_->Size(),
               kProtData);
+#endif
 
   VLOG(jit) << "Created jit code cache: initial data size="
             << PrettySize(initial_data_capacity)
@@ -353,6 +355,7 @@ class ScopedCodeCacheWrite : ScopedTrace {
       : ScopedTrace("ScopedCodeCacheWrite"),
         code_cache_(code_cache),
         only_for_tlb_shootdown_(only_for_tlb_shootdown) {
+#ifndef __GENODE__
     ScopedTrace trace("mprotect all");
     CheckedCall(
         mprotect,
@@ -360,9 +363,11 @@ class ScopedCodeCacheWrite : ScopedTrace {
         code_cache_->code_map_->Begin(),
         only_for_tlb_shootdown_ ? kPageSize : code_cache_->code_map_->Size(),
         code_cache_->memmap_flags_prot_code_ | PROT_WRITE);
+#endif
   }
 
   ~ScopedCodeCacheWrite() {
+#ifndef __GENODE__
     ScopedTrace trace("mprotect code");
     CheckedCall(
         mprotect,
@@ -370,6 +375,7 @@ class ScopedCodeCacheWrite : ScopedTrace {
         code_cache_->code_map_->Begin(),
         only_for_tlb_shootdown_ ? kPageSize : code_cache_->code_map_->Size(),
         code_cache_->memmap_flags_prot_code_);
+#endif
   }
 
  private:

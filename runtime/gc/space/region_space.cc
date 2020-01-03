@@ -258,9 +258,11 @@ void RegionSpace::SetFromSpace(accounting::ReadBarrierTable* rb_table, bool forc
 
 static void ZeroAndProtectRegion(uint8_t* begin, uint8_t* end) {
   ZeroAndReleasePages(begin, end - begin);
+#ifndef __GENODE__
   if (kProtectClearedRegions) {
     CheckedCall(mprotect, __FUNCTION__, begin, end - begin, PROT_NONE);
   }
+#endif
 }
 
 void RegionSpace::ClearFromSpace(/* out */ uint64_t* cleared_bytes,
@@ -629,9 +631,11 @@ void RegionSpace::Region::MarkAsAllocated(RegionSpace* region_space, uint32_t al
   alloc_time_ = alloc_time;
   region_space->AdjustNonFreeRegionLimit(idx_);
   type_ = RegionType::kRegionTypeToSpace;
+#ifndef __GENODE__
   if (kProtectClearedRegions) {
     CheckedCall(mprotect, __FUNCTION__, Begin(), kRegionSize, PROT_READ | PROT_WRITE);
   }
+#endif
 }
 
 void RegionSpace::Region::Unfree(RegionSpace* region_space, uint32_t alloc_time) {

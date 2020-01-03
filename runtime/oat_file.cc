@@ -868,7 +868,9 @@ bool OatFileBase::Setup(int zip_fd, const char* abs_dex_location, std::string* e
     Runtime* runtime = Runtime::Current();
     if (UNLIKELY(runtime == nullptr)) {
       // This must be oatdump without boot image. Make sure the .bss is inaccessible.
+#ifndef __GENODE__
       CheckedCall(mprotect, "protect bss", const_cast<uint8_t*>(BssBegin()), BssSize(), PROT_NONE);
+#endif
     } else if (!IsExecutable()) {
       // Do not try to mmap boot image tables into .bss if the oat file is not executable.
     } else {

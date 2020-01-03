@@ -453,10 +453,12 @@ size_t FreeListSpace::Free(Thread* self, mirror::Object* obj) {
   DCHECK_LE(allocation_size, num_bytes_allocated_);
   num_bytes_allocated_ -= allocation_size;
   madvise(obj, allocation_size, MADV_DONTNEED);
+#ifndef __GENODE__
   if (kIsDebugBuild) {
     // Can't disallow reads since we use them to find next chunks during coalescing.
     CheckedCall(mprotect, __FUNCTION__, obj, allocation_size, PROT_READ);
   }
+#endif
   return allocation_size;
 }
 
