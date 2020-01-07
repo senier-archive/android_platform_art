@@ -130,8 +130,8 @@ class Heap {
   // If true, measure the total allocation time.
   static constexpr size_t kDefaultStartingSize = kPageSize;
   static constexpr size_t kDefaultInitialSize = 2 * MB;
-  static constexpr size_t kDefaultMaximumSize = 64 * MB;
-  static constexpr size_t kDefaultNonMovingSpaceCapacity = 64 * MB;
+  static constexpr size_t kDefaultMaximumSize = 32 * MB;
+  static constexpr size_t kDefaultNonMovingSpaceCapacity = 32 * MB;
   static constexpr size_t kDefaultMaxFree = 2 * MB;
   static constexpr size_t kDefaultMinFree = kDefaultMaxFree / 4;
   static constexpr size_t kDefaultLongPauseLogThreshold = MsToNs(5);
