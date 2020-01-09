@@ -131,7 +131,7 @@ void SetThreadName(const char* thread_name) {
   } else {
     s = thread_name + len - 15;
   }
-#if defined(__linux__) || defined(__GENODE__)
+#if defined(__linux__)
   // pthread_setname_np fails rather than truncating long strings.
   char buf[16];       // MAX_TASK_COMM_LEN=16 is hard-coded in the kernel.
   strncpy(buf, s, sizeof(buf)-1);
@@ -140,6 +140,8 @@ void SetThreadName(const char* thread_name) {
   if (errno != 0) {
     PLOG(WARNING) << "Unable to set the name of current thread to '" << buf << "'";
   }
+#elif defined(__GENODE__)
+  // Not avaible on Genode
 #else  // __APPLE__
   pthread_setname_np(thread_name);
 #endif
