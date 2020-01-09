@@ -373,6 +373,7 @@ std::unique_ptr<const DexFile> ArtDexFileLoader::OpenOneDexFileFromZip(
   }
 
   std::unique_ptr<MemMap> map;
+#ifndef __GENODE__
   if (zip_entry->IsUncompressed()) {
     if (!zip_entry->IsAlignedTo(alignof(DexFile::Header))) {
       // Do not mmap unaligned ZIP entries because
@@ -390,6 +391,7 @@ std::unique_ptr<const DexFile> ArtDexFileLoader::OpenOneDexFileFromZip(
       }
     }
   }
+#endif
 
   if (map == nullptr) {
     // Default path for compressed ZIP entries,
