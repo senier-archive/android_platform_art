@@ -194,8 +194,11 @@ std::unique_ptr<const DexFile> ArtDexFileLoader::Open(const std::string& locatio
     return nullptr;
   }
 
-  std::unique_ptr<DexFile> dex_file = OpenCommon(map->Begin(),
-                                                 map->Size(),
+  // FIXME: Crashes when map->...() used in parameter list below
+  auto b = map->Begin();
+  auto s = map->Size();
+  std::unique_ptr<DexFile> dex_file = OpenCommon(b,
+                                                 s,
                                                  /*data_base*/ nullptr,
                                                  /*data_size*/ 0u,
                                                  location,
@@ -323,8 +326,11 @@ std::unique_ptr<const DexFile> ArtDexFileLoader::OpenFile(int fd,
 
   const DexFile::Header* dex_header = reinterpret_cast<const DexFile::Header*>(map->Begin());
 
-  std::unique_ptr<DexFile> dex_file = OpenCommon(map->Begin(),
-                                                 map->Size(),
+  // FIXME: Crashes when map->...() used in parameter list below
+  auto b = map->Begin();
+  auto s = map->Size();
+  std::unique_ptr<DexFile> dex_file = OpenCommon(b,
+                                                 s,
                                                  /*data_base*/ nullptr,
                                                  /*data_size*/ 0u,
                                                  location,
