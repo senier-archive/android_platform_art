@@ -42,7 +42,7 @@
 
 #include <android-base/logging.h>
 
-#include "../../libcore/ojluni/src/main/native/jvm.h"  // TODO(narayan): fix it
+#include "ojluni/src/main/native/jvm.h"  // TODO(narayan): fix it
 
 #include "base/macros.h"
 #include "common_throws.h"
