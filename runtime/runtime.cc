@@ -1116,7 +1116,9 @@ bool Runtime::Init(RuntimeArgumentMap&& runtime_options_in) {
   using Opt = RuntimeArgumentMap;
   Opt runtime_options(std::move(runtime_options_in));
   ScopedTrace trace(__FUNCTION__);
+#ifndef __GENODE__
   CHECK_EQ(sysconf(_SC_PAGE_SIZE), kPageSize);
+#endif
 
   // Early override for logging output.
   if (runtime_options.Exists(Opt::UseStderrLogger)) {
