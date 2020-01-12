@@ -916,7 +916,9 @@ void Runtime::InitNonZygoteOrPostFork(
     CreateJit();
   }
 
+#ifndef __GENODE__
   StartSignalCatcher();
+#endif
 
   // Start the JDWP thread. If the command-line debugger flags specified "suspend=y",
   // this will pause the runtime (in the internal debugger implementation), so we probably want
