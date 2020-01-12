@@ -1699,7 +1699,9 @@ void Thread::DumpState(std::ostream& os, const Thread* thread, pid_t tid) {
   if (thread != nullptr) {
     int policy;
     sched_param sp;
-#if !defined(__APPLE__)
+#if defined(__GENODE__)
+	// Do nothing
+#elif !defined(__APPLE__)
     // b/36445592 Don't use pthread_getschedparam since pthread may have exited.
     policy = sched_getscheduler(tid);
     if (policy == -1) {
