@@ -23,10 +23,12 @@
 #include <map>
 #include <mutex>
 #include <string>
+#include <list>
 
 #include "android-base/thread_annotations.h"
 
 #include <base/env.h>
+#include <dataspace/client.h>
 #include <region_map/client.h>
 #include <region_map/region_map.h>
 
@@ -293,9 +295,7 @@ class MemMap {
 
   friend class MemMapTest;  // To allow access to base_begin_ and base_size_.
 
-  Genode::Env &env_;
-  Genode::Ram_dataspace_capability ram_ds_cap_;
-  Genode::Region_map_client address_space_;
+  Genode::Ram_dataspace_capability *rdc_;
 };
 
 std::ostream& operator<<(std::ostream& os, const MemMap& mem_map);
