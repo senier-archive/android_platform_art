@@ -47,6 +47,7 @@ using android::base::StringPrintf;
     }
 
     int operation = block ? LOCK_EX : (LOCK_EX | LOCK_NB);
+#ifndef __GENODE__
     int flock_result = TEMP_FAILURE_RETRY(flock(file->Fd(), operation));
     if (flock_result == EWOULDBLOCK) {
       // File is locked by someone else and we are required not to block;
@@ -56,6 +57,7 @@ using android::base::StringPrintf;
       *error_msg = StringPrintf("Failed to lock file '%s': %s", filename, strerror(errno));
       return nullptr;
     }
+#endif
     struct stat fstat_stat;
     int fstat_result = TEMP_FAILURE_RETRY(fstat(file->Fd(), &fstat_stat));
     if (fstat_result != 0) {
@@ -115,6 +117,7 @@ ScopedFlock LockedFile::DupOf(const int fd, const std::string& path,
 
 void LockedFile::ReleaseLock() {
   if (this->Fd() != -1) {
+#ifndef __GENODE__
     int flock_result = TEMP_FAILURE_RETRY(flock(this->Fd(), LOCK_UN));
     if (flock_result != 0) {
       // Only printing a warning is okay since this is only used with either:
@@ -124,6 +127,7 @@ void LockedFile::ReleaseLock() {
       // This means we can be sure that the warning won't cause a deadlock.
       PLOG(WARNING) << "Unable to unlock file " << this->GetPath();
     }
+#endif
   }
 }
 
