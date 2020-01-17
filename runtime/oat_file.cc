@@ -69,7 +69,7 @@ namespace art {
 using android::base::StringPrintf;
 
 // Whether OatFile::Open will try dlopen. Fallback is our own ELF loader.
-static constexpr bool kUseDlopen = true;
+static constexpr bool kUseDlopen = false;
 
 // Whether OatFile::Open will try dlopen on the host. On the host we're not linking against
 // bionic, so cannot take advantage of the support for changed semantics (loading the same soname
@@ -1428,6 +1428,7 @@ OatFile* OatFile::Open(int zip_fd,
     return nullptr;
   }
 
+#ifndef __GENODE__
   // Try dlopen first, as it is required for native debuggability. This will fail fast if dlopen is
   // disabled.
   OatFile* with_dlopen = OatFileBase::OpenOatFile<DlOpenOatFile>(zip_fd,
@@ -1447,6 +1448,8 @@ OatFile* OatFile::Open(int zip_fd,
   if (kPrintDlOpenErrorMessage) {
     LOG(ERROR) << "Failed to dlopen: " << oat_filename << " with error " << *error_msg;
   }
+#endif
+
   // If we aren't trying to execute, we just use our own ElfFile loader for a couple reasons:
   //
   // On target, dlopen may fail when compiling due to selinux restrictions on installd.
