@@ -53,6 +53,8 @@ static constexpr bool kMadviseZeroes = false;
 #define HAVE_MREMAP_SYSCALL false
 #endif
 
+class DataSpace;
+
 // Used to keep track of mmap segments.
 //
 // On 64b systems not supporting MAP_32BIT, the implementation of MemMap will do a linear scan
@@ -242,6 +244,7 @@ class MemMap {
          size_t base_size,
          int prot,
          bool reuse,
+         DataSpace *memory,
          size_t redzone_size = 0) REQUIRES(!MemMap::mem_maps_lock_);
 
   static void DumpMapsLocked(std::ostream& os, bool terse)
@@ -295,7 +298,7 @@ class MemMap {
 
   friend class MemMapTest;  // To allow access to base_begin_ and base_size_.
 
-  Genode::Ram_dataspace_capability *rdc_;
+  DataSpace *memory_;
 };
 
 std::ostream& operator<<(std::ostream& os, const MemMap& mem_map);
