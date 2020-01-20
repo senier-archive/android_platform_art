@@ -168,6 +168,8 @@ class MemMap {
 
   bool Protect(int prot);
 
+  bool Map();
+
   void MadviseDontNeedAndZero();
 
   int GetProtect() const {
@@ -253,7 +255,12 @@ class MemMap {
       REQUIRES(MemMap::mem_maps_lock_);
   static MemMap* GetLargestMemMapAt(void* address)
       REQUIRES(MemMap::mem_maps_lock_);
-  static bool ContainedWithinExistingMap(uint8_t* ptr, size_t size, std::string* error_msg)
+
+  static MemMap *SplitExisting(const std::string& name,
+                               uint8_t* ptr,
+                               size_t size,
+                               int prot,
+                               std::string* error_msg)
       REQUIRES(!MemMap::mem_maps_lock_);
 
   // Internal version of mmap that supports low 4gb emulation.
