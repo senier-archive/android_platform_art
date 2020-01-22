@@ -3901,6 +3901,7 @@ std::ostream& operator<<(std::ostream& os, const Thread& thread) {
 }
 
 bool Thread::ProtectStack(bool fatal_on_error) {
+#ifndef __GENODE__
   void* pregion = tlsPtr_.stack_begin - kStackOverflowProtectedSize;
   VLOG(threads) << "Protecting stack at " << pregion;
   if (mprotect(pregion, kStackOverflowProtectedSize, PROT_NONE) == -1) {
@@ -3911,6 +3912,7 @@ bool Thread::ProtectStack(bool fatal_on_error) {
     }
     return false;
   }
+#endif
   return true;
 }
 
