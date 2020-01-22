@@ -1024,6 +1024,23 @@ void Thread::SetThreadName(const char* name) {
   Dbg::DdmSendThreadNotification(this, CHUNK_TYPE("THNM"));
 }
 
+#ifdef __GENODE__
+
+extern "C"
+int pthread_attr_get_np(pthread_t pthread, pthread_attr_t *attr);
+
+static void GetThreadStack(pthread_t thread,
+                           void** stack_base,
+                           size_t* stack_size,
+                           size_t* guard_size) {
+    pthread_attr_t attributes;
+    CHECK_PTHREAD_CALL(pthread_attr_init, (&attributes), __FUNCTION__);
+    CHECK_PTHREAD_CALL(pthread_attr_get_np, (thread, &attributes), __FUNCTION__);
+    CHECK_PTHREAD_CALL(pthread_attr_getstack, (&attributes, stack_base, stack_size), __FUNCTION__);
+    *guard_size = 0;
+}
+
+#else
 static void GetThreadStack(pthread_t thread,
                            void** stack_base,
                            size_t* stack_size,
@@ -1050,12 +1067,8 @@ static void GetThreadStack(pthread_t thread,
   pthread_attr_t attributes;
   pthread_attr_init(&attributes);
   CHECK_PTHREAD_CALL(pthread_attr_getstack, (&attributes, stack_base, stack_size), __FUNCTION__);
-#ifdef __GENODE__
-  *guard_size = 0;
-#else
   CHECK_PTHREAD_CALL(pthread_attr_getguardsize, (&attributes, guard_size), __FUNCTION__);
   CHECK_PTHREAD_CALL(pthread_attr_destroy, (&attributes), __FUNCTION__);
-#endif
 
 #if defined(__GLIBC__)
   // If we're the main thread, check whether we were run with an unlimited stack. In that case,
@@ -1083,6 +1096,7 @@ static void GetThreadStack(pthread_t thread,
 
 #endif
 }
+#endif // __GENODE__
 
 bool Thread::InitStackHwm() {
   void* read_stack_base;
