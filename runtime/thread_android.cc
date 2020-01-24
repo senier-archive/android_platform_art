@@ -52,6 +52,10 @@ void Thread::SetNativePriority(int newPriority) {
     newPriority = 5;
   }
 
+#ifdef __GENODE__
+    return;
+#endif
+
   int newNice = kNiceValues[newPriority-1];
   pid_t tid = GetTid();
 
@@ -75,6 +79,9 @@ void Thread::SetNativePriority(int newPriority) {
 
 int Thread::GetNativePriority() {
   errno = 0;
+#ifdef __GENODE__
+  return kNormThreadPriority;
+#else
   int native_priority = getpriority(PRIO_PROCESS, 0);
   if (native_priority == -1 && errno != 0) {
     PLOG(WARNING) << "getpriority failed";
@@ -92,6 +99,7 @@ int Thread::GetNativePriority() {
     managed_priority = kMaxThreadPriority;
   }
   return managed_priority;
+#endif
 }
 
 void Thread::SetUpAlternateSignalStack() {
