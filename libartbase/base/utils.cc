@@ -53,7 +53,7 @@ pid_t GetTid() {
   uint64_t owner;
   CHECK_PTHREAD_CALL(pthread_threadid_np, (nullptr, &owner), __FUNCTION__);  // Requires Mac OS 10.6
   return owner;
-#elif defined(__BIONIC__)
+#elif defined(__BIONIC__) || defined(__GENODE__)
   return gettid();
 #else
   return syscall(__NR_gettid);
