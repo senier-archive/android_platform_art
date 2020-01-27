@@ -28,7 +28,7 @@ CodeSimulatorContainer::CodeSimulatorContainer(InstructionSet target_isa)
     : libart_simulator_handle_(nullptr),
       simulator_(nullptr) {
   const char* libart_simulator_so_name =
-      kIsDebugBuild ? "libartd-simulator.so" : "libart-simulator.so";
+      kIsDebugBuild ? "gart_libart-simulator.lib.so" : "gart_libart-simulator.lib.so";
   libart_simulator_handle_ = dlopen(libart_simulator_so_name, RTLD_NOW);
   // It is not a real error when libart-simulator does not exist, e.g., on target.
   if (libart_simulator_handle_ == nullptr) {
