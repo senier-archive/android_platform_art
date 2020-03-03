@@ -501,7 +501,7 @@ static size_t FixStackSize(size_t stack_size) {
 
   // Dalvik used the bionic pthread default stack size for native threads,
   // so include that here to support apps that expect large native stacks.
-  stack_size += 1 * MB;
+  stack_size += 800 * KB;
 
   // It's not possible to request a stack smaller than the system-defined PTHREAD_STACK_MIN.
   if (stack_size < PTHREAD_STACK_MIN) {
