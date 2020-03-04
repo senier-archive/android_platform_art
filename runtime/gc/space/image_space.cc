@@ -304,7 +304,11 @@ static bool VerifyImage(const char* image_location,
 
   std::string command_line(android::base::Join(argv, ' '));
   LOG(INFO) << "VerifyImage: " << command_line;
+#ifdef __GENODE__
+  return true;
+#else
   return Exec(argv, error_msg);
+#endif
 }
 
 static ImageHeader* ReadSpecificImageHeader(const char* filename, std::string* error_msg) {
@@ -1468,6 +1472,10 @@ static constexpr uint64_t kTmpFsSentinelValue = 384 * MB;
 static bool CheckSpace(const std::string& cache_filename, std::string* error_msg) {
   // Using statvfs vs statvfs64 because of b/18207376, and it is enough for all practical purposes.
   struct statvfs buf;
+
+#ifdef __GENODE__
+  return true;
+#endif
 
   int res = TEMP_FAILURE_RETRY(statvfs(cache_filename.c_str(), &buf));
   if (res != 0) {
