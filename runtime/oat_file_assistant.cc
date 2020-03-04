@@ -198,11 +198,13 @@ bool OatFileAssistant::Lock(std::string* error_msg) {
   // to generate oat files anyway.
   std::string lock_file_name = dex_location_ + "." + GetInstructionSetString(isa_) + ".flock";
 
+#ifndef __GENODE__
   flock_ = LockedFile::Open(lock_file_name.c_str(), error_msg);
   if (flock_.get() == nullptr) {
     unlink(lock_file_name.c_str());
     return false;
   }
+#endif
   return true;
 }
 
