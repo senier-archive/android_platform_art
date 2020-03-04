@@ -217,7 +217,7 @@ Jit* Jit::Create(JitOptions* options, std::string* error_msg) {
 
 bool Jit::LoadCompilerLibrary(std::string* error_msg) {
   jit_library_handle_ = dlopen(
-      kIsDebugBuild ? "libartd-compiler.so" : "libart-compiler.so", RTLD_NOW);
+      kIsDebugBuild ? "gart_libart-compiler.lib.so" : "gart_libart-compiler.lib.so", RTLD_NOW);
   if (jit_library_handle_ == nullptr) {
     std::ostringstream oss;
     oss << "JIT could not load libart-compiler.so: " << dlerror();
