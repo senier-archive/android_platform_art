@@ -317,6 +317,7 @@ Heap::Heap(size_t initial_size,
   }
 
   // Load image space(s).
+#ifndef __GENODE__
   if (space::ImageSpace::LoadBootImage(image_file_name,
                                        image_instruction_set,
                                        &boot_image_spaces_,
@@ -325,6 +326,7 @@ Heap::Heap(size_t initial_size,
       AddSpace(space);
     }
   }
+#endif
 
   /*
   requested_alloc_space_begin ->     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
