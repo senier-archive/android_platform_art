@@ -50,7 +50,7 @@ class SelfDeletingTask : public Task {
 
 class ThreadPoolWorker {
  public:
-  static const size_t kDefaultStackSize = 1000 * KB;
+  static const size_t kDefaultStackSize = 900 * KB;
 
   size_t GetStackSize() const {
     DCHECK(stack_.get() != nullptr);
