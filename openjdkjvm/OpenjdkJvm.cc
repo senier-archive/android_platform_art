@@ -316,7 +316,9 @@ JNIEXPORT void JVM_GC(void) {
 
 JNIEXPORT __attribute__((noreturn)) void JVM_Exit(jint status) {
   LOG(INFO) << "System.exit called, status: " << status;
+#ifndef __GENODE__
   art::Runtime::Current()->CallExitHook(status);
+#endif
   exit(status);
 }
 
